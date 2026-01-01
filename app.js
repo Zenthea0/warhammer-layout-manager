@@ -2602,9 +2602,10 @@ const Warhammer40kLayoutManager = () => {
 
       // Dessiner le rectangle ou le polygone
       if (terrainType.buildingPolygon) {
-        // Dessiner l'empreinte en pointillés
-        ctx.setLineDash([3, 3]);
-        ctx.strokeStyle = '#6b7280';
+        // Dessiner l'empreinte en pointillés (plus visible pour l'export)
+        ctx.setLineDash([4, 4]);
+        ctx.strokeStyle = '#d1d5db'; // Gris clair pour meilleure visibilité
+        ctx.lineWidth = 2;
         ctx.strokeRect(-w / 2, -h / 2, w, h);
         ctx.setLineDash([]);
 
