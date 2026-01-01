@@ -218,7 +218,16 @@ const Warhammer40kLayoutManager = () => {
   const [cornersMode, setCornersMode] = useState('hidden'); // 'hidden', 'classic', 'feq'
   const [optimizing, setOptimizing] = useState(false);
   
-  const [customLayouts, setCustomLayouts] = useState({});
+  // Charger les layouts personnalisés depuis localStorage
+  const [customLayouts, setCustomLayouts] = useState(() => {
+    try {
+      const stored = localStorage.getItem('w40k_customLayouts');
+      return stored ? JSON.parse(stored) : {};
+    } catch (e) {
+      console.error('Erreur chargement layouts:', e);
+      return {};
+    }
+  });
   const [showSaveDialog, setShowSaveDialog] = useState(false);
   const [showRenameDialog, setShowRenameDialog] = useState(false);
   const [layoutNameInput, setLayoutNameInput] = useState("");
@@ -339,6 +348,15 @@ const Warhammer40kLayoutManager = () => {
     window.addEventListener('resize', calculateScale);
     return () => window.removeEventListener('resize', calculateScale);
   }, []);
+
+  // Sauvegarder les layouts personnalisés dans localStorage
+  useEffect(() => {
+    try {
+      localStorage.setItem('w40k_customLayouts', JSON.stringify(customLayouts));
+    } catch (e) {
+      console.error('Erreur sauvegarde layouts:', e);
+    }
+  }, [customLayouts]);
 
   // Charger les résultats LoS sauvegardés lors du changement de zone de déploiement
   useEffect(() => {
@@ -2440,17 +2458,17 @@ const Warhammer40kLayoutManager = () => {
     canvas.height = EXPORT_HEIGHT;
     const ctx = canvas.getContext('2d');
 
-    // Fond blanc
+    // Fond gris foncé (comme l'application)
     ctx.fillStyle = '#1f2937';
     ctx.fillRect(0, 0, EXPORT_WIDTH, EXPORT_HEIGHT);
 
-    // Fond de la table (vert)
-    ctx.fillStyle = '#15803d';
+    // Fond de la table (gris comme dans l'app)
+    ctx.fillStyle = '#4b5563';
     ctx.fillRect(MARGIN, MARGIN, TABLE_EXPORT_WIDTH, TABLE_EXPORT_HEIGHT);
 
-    // Bordure de la table
-    ctx.strokeStyle = '#166534';
-    ctx.lineWidth = 2;
+    // Bordure de la table (jaune)
+    ctx.strokeStyle = '#ca8a04';
+    ctx.lineWidth = 4;
     ctx.strokeRect(MARGIN, MARGIN, TABLE_EXPORT_WIDTH, TABLE_EXPORT_HEIGHT);
 
     // Lignes de centre en pointillés
@@ -2821,14 +2839,19 @@ const Warhammer40kLayoutManager = () => {
       // Statistiques de classification
       let classifStats = '';
       if (gridClassification) {
-        const stats = {};
-        for (const [key, value] of gridClassification.entries()) {
-          stats[value] = (stats[value] || 0) + 1;
-        }
+        const zone1Count = (gridClassification.zone1Only?.length || 0) + (gridClassification.zone1AndNoManLand?.length || 0);
+        const nmlCount = gridClassification.noManLandOnly?.length || 0;
+        const zone2Count = (gridClassification.zone2Only?.length || 0) + (gridClassification.zone2AndNoManLand?.length || 0);
+        const frontier1Count = gridClassification.zone1AndNoManLand?.length || 0;
+        const frontier2Count = gridClassification.zone2AndNoManLand?.length || 0;
+        const terrainCount = (gridClassification.zone1Only?.filter(p => p.inTerrain).length || 0) + 
+                            (gridClassification.noManLandOnly?.filter(p => p.inTerrain).length || 0) +
+                            (gridClassification.zone2Only?.filter(p => p.inTerrain).length || 0);
+        
         classifStats = `
-          <li>Points classifiés : Zone J1=${stats['zone1'] || 0}, NML=${stats['nml'] || 0}, Zone J2=${stats['zone2'] || 0}</li>
-          <li>Points frontière : J1/NML=${stats['frontier1'] || 0}, J2/NML=${stats['frontier2'] || 0}</li>
-          <li>Points dans décors : ${(stats['terrain'] || 0) + (stats['terrain_zone1'] || 0) + (stats['container'] || 0)}</li>
+          <li>Points classifiés : Zone J1=${zone1Count}, NML=${nmlCount}, Zone J2=${zone2Count}</li>
+          <li>Points frontière : J1/NML=${frontier1Count}, J2/NML=${frontier2Count}</li>
+          <li>Points dans décors : ${terrainCount}</li>
         `;
       }
       
