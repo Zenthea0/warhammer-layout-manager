@@ -11,7 +11,7 @@ const TERRAIN_TYPES = {
   gruin: { 
     width: 120, height: 60,
     color: 'bg-gray-600', borderColor: 'border-gray-800',
-    label: 'Grande Ruine', icon: 'ðŸ›ï¸',
+    label: 'Grande Ruine', icon: '🏛️',
     buildingPolygon: [
       { x: 1, y: 6 }, { x: 1, y: 1 }, { x: 10, y: 1 },
       { x: 10, y: 1.2 }, { x: 1.2, y: 1.2 }, { x: 1.2, y: 6 }
@@ -20,7 +20,7 @@ const TERRAIN_TYPES = {
   pruin: { 
     width: 120, height: 60,
     color: 'bg-gray-500', borderColor: 'border-gray-700',
-    label: 'Petite Ruine', icon: 'ðŸšï¸',
+    label: 'Petite Ruine', icon: '🏚️',
     buildingPolygon: [
       { x: 10.8, y: 6 }, { x: 10.8, y: 1.2 }, { x: 2, y: 1.2 },
       { x: 2, y: 1 }, { x: 11, y: 1 }, { x: 11, y: 6 }
@@ -29,17 +29,17 @@ const TERRAIN_TYPES = {
   forest: { 
     width: 90, height: 50,
     color: 'bg-green-700', borderColor: 'border-green-900',
-    label: 'ForÃªt', icon: 'ðŸŒ²'
+    label: 'Forêt', icon: '🌲'
   },
   container: { 
     width: 50, height: 25,
     color: 'bg-orange-600', borderColor: 'border-orange-800',
-    label: 'Container', icon: 'ðŸ“¦'
+    label: 'Container', icon: '📦'
   }
 };
 
 const WTC_LAYOUTS = {
-  "Layout par dÃ©faut": [
+  "Layout par défaut": [
     { id: 1, x: 30, y: 20, type: 'gruin', rotation: 0, name: "GRuine 1", symmetricId: 2 },
     { id: 2, x: 450, y: 360, type: 'gruin', rotation: 180, name: "GRuine 1'", symmetricId: 1 },
     { id: 3, x: 430, y: 50, type: 'gruin', rotation: 0, name: "GRuine 2", symmetricId: 4 },
@@ -48,8 +48,8 @@ const WTC_LAYOUTS = {
     { id: 6, x: 240, y: 280, type: 'pruin', rotation: 180, name: "PRuine 1'", symmetricId: 5 },
     { id: 7, x: 100, y: 190, type: 'pruin', rotation: 0, name: "PRuine 2", symmetricId: 8 },
     { id: 8, x: 380, y: 190, type: 'pruin', rotation: 180, name: "PRuine 2'", symmetricId: 7 },
-    { id: 9, x: 70, y: 120, type: 'forest', rotation: 0, name: "ForÃªt 1", symmetricId: 10 },
-    { id: 10, x: 440, y: 270, type: 'forest', rotation: 180, name: "ForÃªt 1'", symmetricId: 9 },
+    { id: 9, x: 70, y: 120, type: 'forest', rotation: 0, name: "Forêt 1", symmetricId: 10 },
+    { id: 10, x: 440, y: 270, type: 'forest', rotation: 180, name: "Forêt 1'", symmetricId: 9 },
     { id: 11, x: 275, y: 50, type: 'container', rotation: 0, name: "Container 1", symmetricId: 12 },
     { id: 12, x: 275, y: 365, type: 'container', rotation: 180, name: "Container 1'", symmetricId: 11 },
   ]
@@ -156,9 +156,9 @@ const DEPLOYMENT_ZONES = {
   }
 };
 
-// Objectifs pour chaque zone de dÃ©ploiement (5 objectifs par zone)
-// Cercle intÃ©rieur : 40mm diamÃ¨tre â‰ˆ 1.57" diamÃ¨tre â†’ rayon â‰ˆ 0.79"
-// Cercle extÃ©rieur : 20mm + 3" = 0.79" + 3" = 3.79" rayon
+// Objectifs pour chaque zone de déploiement (5 objectifs par zone)
+// Cercle intérieur : 40mm diamètre ≈ 1.57" diamètre → rayon ≈ 0.79"
+// Cercle extérieur : 20mm + 3" = 0.79" + 3" = 3.79" rayon
 const OBJECTIVES = {
   "Dawn of War": [
     { x: 30, y: 22 }, { x: 30, y: 6 }, { x: 30, y: 38 }, { x: 10, y: 22 }, { x: 50, y: 22 }
@@ -181,13 +181,13 @@ const OBJECTIVES = {
 };
 
 // Constantes pour les objectifs (conversion mm vers pouces)
-const OBJECTIVE_INNER_RADIUS = 0.79; // 40mm diamÃ¨tre / 2 â‰ˆ 0.79"
-const OBJECTIVE_OUTER_RADIUS = 3.79; // 20mm + 3" â‰ˆ 0.79" + 3"
+const OBJECTIVE_INNER_RADIUS = 0.79; // 40mm diamètre / 2 ≈ 0.79"
+const OBJECTIVE_OUTER_RADIUS = 3.79; // 20mm + 3" ≈ 0.79" + 3"
 
 const Warhammer40kLayoutManager = () => {
-  const initialLayout = WTC_LAYOUTS["Layout par dÃ©faut"] || [];
+  const initialLayout = WTC_LAYOUTS["Layout par défaut"] || [];
   const [terrains, setTerrains] = useState(JSON.parse(JSON.stringify(initialLayout)));
-  const [selectedLayout, setSelectedLayout] = useState("Layout par dÃ©faut");
+  const [selectedLayout, setSelectedLayout] = useState("Layout par défaut");
   const [deploymentZone, setDeploymentZone] = useState("Dawn of War");
   const [showDeployment, setShowDeployment] = useState(true);
   const [showObjectives, setShowObjectives] = useState(false);
@@ -197,18 +197,18 @@ const Warhammer40kLayoutManager = () => {
   const [isDragging, setIsDragging] = useState(false);
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
   const [dragOriginalRotation, setDragOriginalRotation] = useState(null); // Rotation d'origine avant le drag
-  const snapGuidesRef = useRef([]); // Guides d'aimantation (useRef pour Ã©viter re-renders)
+  const snapGuidesRef = useRef([]); // Guides d'aimantation (useRef pour éviter re-renders)
   const [snapGuidesVersion, setSnapGuidesVersion] = useState(0); // Pour forcer le re-render du SVG des guides
   const losCalculationCancelledRef = useRef(false); // Pour annuler le calcul LoS en cours
   
-  // Ã‰tats pour le mode positionnement fin
-  const [finePositionStep, setFinePositionStep] = useState(1); // Ã‰tape 1 Ã  5
-  const [finePositionCorner1, setFinePositionCorner1] = useState(null); // Index du premier coin sÃ©lectionnÃ©
-  const [finePositionCorner2, setFinePositionCorner2] = useState(null); // Index du deuxiÃ¨me coin sÃ©lectionnÃ©
-  const [finePositionX, setFinePositionX] = useState(''); // CoordonnÃ©e X pour l'Ã©tape 3
-  const [finePositionY, setFinePositionY] = useState(''); // CoordonnÃ©e Y pour l'Ã©tape 3
-  const [finePositionAxis, setFinePositionAxis] = useState('X'); // Axe choisi pour l'Ã©tape 5 ('X' ou 'Y')
-  const [finePositionValue, setFinePositionValue] = useState(''); // Valeur pour l'Ã©tape 5
+  // États pour le mode positionnement fin
+  const [finePositionStep, setFinePositionStep] = useState(1); // Étape 1 à 5
+  const [finePositionCorner1, setFinePositionCorner1] = useState(null); // Index du premier coin sélectionné
+  const [finePositionCorner2, setFinePositionCorner2] = useState(null); // Index du deuxième coin sélectionné
+  const [finePositionX, setFinePositionX] = useState(''); // Coordonnée X pour l'étape 3
+  const [finePositionY, setFinePositionY] = useState(''); // Coordonnée Y pour l'étape 3
+  const [finePositionAxis, setFinePositionAxis] = useState('X'); // Axe choisi pour l'étape 5 ('X' ou 'Y')
+  const [finePositionValue, setFinePositionValue] = useState(''); // Valeur pour l'étape 5
   const [finePositionError, setFinePositionError] = useState(''); // Message d'erreur
   
   const [pointA, setPointA] = useState(null);
@@ -218,7 +218,7 @@ const Warhammer40kLayoutManager = () => {
   const [cornersMode, setCornersMode] = useState('hidden'); // 'hidden', 'classic', 'feq'
   const [optimizing, setOptimizing] = useState(false);
   
-  // Charger les layouts personnalisÃ©s depuis localStorage
+  // Charger les layouts personnalisés depuis localStorage
   const [customLayouts, setCustomLayouts] = useState(() => {
     try {
       const stored = localStorage.getItem('w40k_customLayouts');
@@ -234,7 +234,7 @@ const Warhammer40kLayoutManager = () => {
   const [saveDebugInfo, setSaveDebugInfo] = useState(null);
   const [containerMoveStep, setContainerMoveStep] = useState(1); // 1 pouce ou 0.5 pouce
   
-  // Ã‰tats pour l'import/export de layouts
+  // États pour l'import/export de layouts
   const MAX_LAYOUTS = 30;
   const [showLayoutImportExport, setShowLayoutImportExport] = useState(false);
   const [importMode, setImportMode] = useState('merge'); // 'merge' ou 'replace'
@@ -242,7 +242,7 @@ const Warhammer40kLayoutManager = () => {
   const [importSuccess, setImportSuccess] = useState('');
   const fileInputRef = useRef(null);
   
-  // Ã‰tats pour l'export d'images
+  // États pour l'export d'images
   const [showExportDialog, setShowExportDialog] = useState(false);
   const [exportTab, setExportTab] = useState('image'); // 'image' ou 'pdf'
   const [exportShowClassicCoords, setExportShowClassicCoords] = useState(false);
@@ -253,7 +253,7 @@ const Warhammer40kLayoutManager = () => {
   const [exportGenerating, setExportGenerating] = useState(false);
   const exportCanvasRef = useRef(null);
   
-  // Configuration du nombre de dÃ©cors pour la gÃ©nÃ©ration alÃ©atoire
+  // Configuration du nombre de décors pour la génération aléatoire
   const [showGenerateConfig, setShowGenerateConfig] = useState(false);
   const [configGruin, setConfigGruin] = useState(4);
   const [configPruin, setConfigPruin] = useState(4);
@@ -261,13 +261,13 @@ const Warhammer40kLayoutManager = () => {
   const [configContainer, setConfigContainer] = useState(2);
   const [generateError, setGenerateError] = useState(null);
   
-  // Mode LoS avancÃ©
+  // Mode LoS avancé
   const [advancedLoSMode, setAdvancedLoSMode] = useState(false);
   const [losResolution, setLosResolution] = useState(0.5); // 0.25, 0.5, ou 1 pouce
-  const [excludeTerrainPoints, setExcludeTerrainPoints] = useState(true); // Exclure les points dans les dÃ©cors de la zone 1
+  const [excludeTerrainPoints, setExcludeTerrainPoints] = useState(true); // Exclure les points dans les décors de la zone 1
   const [advancedLoSCalculating, setAdvancedLoSCalculating] = useState(false);
   const [advancedLoSProgress, setAdvancedLoSProgress] = useState(0);
-  const [advancedLoSResults, setAdvancedLoSResults] = useState(null); // RÃ©sultats des calculs
+  const [advancedLoSResults, setAdvancedLoSResults] = useState(null); // Résultats des calculs
   const [showAdvancedLoSConfig, setShowAdvancedLoSConfig] = useState(false);
   const [showGridPoints, setShowGridPoints] = useState(false); // Afficher les points de la grille
   const [showVisiblePoints, setShowVisiblePoints] = useState(false); // Afficher les points visibles
@@ -278,7 +278,7 @@ const Warhammer40kLayoutManager = () => {
   const [tableScale, setTableScale] = useState(1);
   const tableContainerRef = useRef(null);
 
-  // Fonctions de gestion du LocalStorage pour les rÃ©sultats LoS
+  // Fonctions de gestion du LocalStorage pour les résultats LoS
   const getLosStorageKey = (layoutName, zone) => `${layoutName}_${zone}`;
   
   const saveLoSResults = (layoutName, zone, results) => {
@@ -295,7 +295,7 @@ const Warhammer40kLayoutManager = () => {
       };
       localStorage.setItem('losResults', JSON.stringify(stored));
     } catch (e) {
-      console.error('Erreur sauvegarde rÃ©sultats LoS:', e);
+      console.error('Erreur sauvegarde résultats LoS:', e);
     }
   };
   
@@ -315,7 +315,7 @@ const Warhammer40kLayoutManager = () => {
       }
       return null;
     } catch (e) {
-      console.error('Erreur chargement rÃ©sultats LoS:', e);
+      console.error('Erreur chargement résultats LoS:', e);
       return null;
     }
   };
@@ -326,14 +326,14 @@ const Warhammer40kLayoutManager = () => {
       const keysToDelete = Object.keys(stored).filter(key => key.startsWith(`${layoutName}_`));
       keysToDelete.forEach(key => delete stored[key]);
       localStorage.setItem('losResults', JSON.stringify(stored));
-      // Aussi vider les rÃ©sultats en mÃ©moire si c'est le layout actuel
+      // Aussi vider les résultats en mémoire si c'est le layout actuel
       if (layoutName === selectedLayout) {
         setAdvancedLoSResults(null);
         setShowVisiblePoints(false);
         setShowVisibleSurfaces(false);
       }
     } catch (e) {
-      console.error('Erreur invalidation rÃ©sultats LoS:', e);
+      console.error('Erreur invalidation résultats LoS:', e);
     }
   };
 
@@ -349,7 +349,7 @@ const Warhammer40kLayoutManager = () => {
     return () => window.removeEventListener('resize', calculateScale);
   }, []);
 
-  // Sauvegarder les layouts personnalisÃ©s dans localStorage
+  // Sauvegarder les layouts personnalisés dans localStorage
   useEffect(() => {
     try {
       localStorage.setItem('w40k_customLayouts', JSON.stringify(customLayouts));
@@ -358,7 +358,7 @@ const Warhammer40kLayoutManager = () => {
     }
   }, [customLayouts]);
 
-  // Charger les rÃ©sultats LoS sauvegardÃ©s lors du changement de zone de dÃ©ploiement
+  // Charger les résultats LoS sauvegardés lors du changement de zone de déploiement
   useEffect(() => {
     const savedResults = loadLoSResults(selectedLayout, deploymentZone);
     if (savedResults) {
@@ -381,7 +381,7 @@ const Warhammer40kLayoutManager = () => {
       setLosResult(null);
       setSelectedTerrain(null);
       
-      // Charger les rÃ©sultats LoS sauvegardÃ©s pour ce layout et la zone actuelle
+      // Charger les résultats LoS sauvegardés pour ce layout et la zone actuelle
       const savedResults = loadLoSResults(layoutName, deploymentZone);
       if (savedResults) {
         setAdvancedLoSResults(savedResults);
@@ -403,37 +403,37 @@ const Warhammer40kLayoutManager = () => {
   const validateGenerateConfig = () => {
     const errors = [];
     
-    // VÃ©rifier que chaque nombre est pair
+    // Vérifier que chaque nombre est pair
     if (configGruin % 2 !== 0) {
-      errors.push("Le nombre de Grandes Ruines doit Ãªtre pair");
+      errors.push("Le nombre de Grandes Ruines doit être pair");
     }
     if (configPruin % 2 !== 0) {
-      errors.push("Le nombre de Petites Ruines doit Ãªtre pair");
+      errors.push("Le nombre de Petites Ruines doit être pair");
     }
     if (configForest % 2 !== 0) {
-      errors.push("Le nombre de ForÃªts doit Ãªtre pair");
+      errors.push("Le nombre de Forêts doit être pair");
     }
     if (configContainer % 2 !== 0) {
-      errors.push("Le nombre de Containers doit Ãªtre pair");
+      errors.push("Le nombre de Containers doit être pair");
     }
     
-    // VÃ©rifier les limites individuelles
+    // Vérifier les limites individuelles
     if (configGruin < 0 || configGruin > 8) {
-      errors.push("Le nombre de Grandes Ruines doit Ãªtre entre 0 et 8");
+      errors.push("Le nombre de Grandes Ruines doit être entre 0 et 8");
     }
     if (configPruin < 0 || configPruin > 8) {
-      errors.push("Le nombre de Petites Ruines doit Ãªtre entre 0 et 8");
+      errors.push("Le nombre de Petites Ruines doit être entre 0 et 8");
     }
     if (configForest < 0 || configForest > 4) {
-      errors.push("Le nombre de ForÃªts doit Ãªtre entre 0 et 4");
+      errors.push("Le nombre de Forêts doit être entre 0 et 4");
     }
     if (configContainer < 0 || configContainer > 4) {
-      errors.push("Le nombre de Containers doit Ãªtre entre 0 et 4");
+      errors.push("Le nombre de Containers doit être entre 0 et 4");
     }
     
-    // VÃ©rifier le total gruin + pruin
+    // Vérifier le total gruin + pruin
     if (configGruin + configPruin > 12) {
-      errors.push("Le total Grandes Ruines + Petites Ruines ne doit pas dÃ©passer 12");
+      errors.push("Le total Grandes Ruines + Petites Ruines ne doit pas dépasser 12");
     }
     
     return errors;
@@ -450,19 +450,19 @@ const Warhammer40kLayoutManager = () => {
     generateRandomLayout();
   };
 
-  // ===== FONCTIONS POUR LE MODE LOS AVANCÃ‰ =====
+  // ===== FONCTIONS POUR LE MODE LOS AVANCÉ =====
   
-  // VÃ©rifie si un point est dans un polygone (algorithme ray-casting amÃ©liorÃ©)
+  // Vérifie si un point est dans un polygone (algorithme ray-casting amélioré)
   // Inclut les points sur les bords du polygone
   const isPointInPolygon = (point, polygon) => {
     const n = polygon.length;
     
-    // D'abord vÃ©rifier si le point est sur un des bords du polygone
+    // D'abord vérifier si le point est sur un des bords du polygone
     for (let i = 0, j = n - 1; i < n; j = i++) {
       const xi = polygon[i].x, yi = polygon[i].y;
       const xj = polygon[j].x, yj = polygon[j].y;
       
-      // VÃ©rifier si le point est sur ce segment
+      // Vérifier si le point est sur ce segment
       if (isPointOnSegment(point, { x: xi, y: yi }, { x: xj, y: yj })) {
         return true;
       }
@@ -484,11 +484,11 @@ const Warhammer40kLayoutManager = () => {
     return inside;
   };
   
-  // VÃ©rifie si un point est sur un segment (avec tolÃ©rance)
+  // Vérifie si un point est sur un segment (avec tolérance)
   const isPointOnSegment = (point, p1, p2) => {
     const tolerance = 0.0001;
     
-    // VÃ©rifier si le point est dans le rectangle englobant du segment
+    // Vérifier si le point est dans le rectangle englobant du segment
     const minX = Math.min(p1.x, p2.x) - tolerance;
     const maxX = Math.max(p1.x, p2.x) + tolerance;
     const minY = Math.min(p1.y, p2.y) - tolerance;
@@ -498,30 +498,30 @@ const Warhammer40kLayoutManager = () => {
       return false;
     }
     
-    // Calculer la distance du point Ã  la ligne
+    // Calculer la distance du point à la ligne
     const dx = p2.x - p1.x;
     const dy = p2.y - p1.y;
     const lengthSq = dx * dx + dy * dy;
     
     if (lengthSq < tolerance * tolerance) {
-      // Segment de longueur quasi nulle, vÃ©rifier la distance au point
+      // Segment de longueur quasi nulle, vérifier la distance au point
       const distSq = (point.x - p1.x) ** 2 + (point.y - p1.y) ** 2;
       return distSq < tolerance * tolerance;
     }
     
-    // Distance perpendiculaire du point Ã  la ligne
+    // Distance perpendiculaire du point à la ligne
     const cross = Math.abs((point.y - p1.y) * dx - (point.x - p1.x) * dy);
     const distance = cross / Math.sqrt(lengthSq);
     
     return distance < tolerance;
   };
   
-  // VÃ©rifie si un point est dans une zone de dÃ©ploiement (polygon ou path)
+  // Vérifie si un point est dans une zone de déploiement (polygon ou path)
   const isPointInDeploymentZone = (point, zone) => {
     if (zone.type === 'polygon') {
       return isPointInPolygon(point, zone.points);
     } else if (zone.type === 'path') {
-      // Pour les paths avec arcs, on convertit en polygone en Ã©chantillonnant l'arc
+      // Pour les paths avec arcs, on convertit en polygone en échantillonnant l'arc
       const polygonPoints = convertPathToPolygon(zone);
       return isPointInPolygon(point, polygonPoints);
     }
@@ -538,13 +538,13 @@ const Warhammer40kLayoutManager = () => {
     // Centre de l'arc : (30, 22), rayon : 9
     const cx = 30, cy = 22, r = 9;
     
-    // On utilise une heuristique basÃ©e sur le path
-    const pathStr = zone.d(1); // On gÃ©nÃ¨re le path avec scale=1 pour avoir les coordonnÃ©es en pouces
+    // On utilise une heuristique basée sur le path
+    const pathStr = zone.d(1); // On génère le path avec scale=1 pour avoir les coordonnées en pouces
     
     // Extraire les points du path
     const points = [];
     
-    // Parser le path pour extraire les coordonnÃ©es
+    // Parser le path pour extraire les coordonnées
     // Format: M x y L x y L x y ... A rx ry rotation large-arc sweep x y Z
     const commands = pathStr.match(/[MLAZ][^MLAZ]*/gi);
     
@@ -570,7 +570,7 @@ const Warhammer40kLayoutManager = () => {
           arcStart = { x: lastX, y: lastY };
           arcEnd = { x: coords[5], y: coords[6] };
           
-          // Ã‰chantillonner l'arc
+          // Échantillonner l'arc
           const arcPoints = sampleArc(cx, cy, r, arcStart, arcEnd, 16);
           for (const ap of arcPoints) {
             points.push(ap);
@@ -586,28 +586,28 @@ const Warhammer40kLayoutManager = () => {
     return points;
   };
   
-  // Ã‰chantillonne un arc de cercle entre deux points
+  // Échantillonne un arc de cercle entre deux points
   const sampleArc = (cx, cy, r, start, end, numSamples) => {
     const points = [];
     
-    // Calculer les angles de dÃ©part et d'arrivÃ©e
+    // Calculer les angles de départ et d'arrivée
     let startAngle = Math.atan2(start.y - cy, start.x - cx);
     let endAngle = Math.atan2(end.y - cy, end.x - cx);
     
     // S'assurer qu'on va dans le bon sens (sens anti-horaire pour sweep=0)
-    // Pour Search and Destroy player1: de (39,22) Ã  (30,13) -> de 0Â° Ã  -90Â° (ou 270Â°)
-    // Pour Search and Destroy player2: de (21,22) Ã  (30,31) -> de 180Â° Ã  90Â°
+    // Pour Search and Destroy player1: de (39,22) à (30,13) -> de 0° à -90° (ou 270°)
+    // Pour Search and Destroy player2: de (21,22) à (30,31) -> de 180° à 90°
     
     // Normaliser les angles
     while (startAngle < 0) startAngle += 2 * Math.PI;
     while (endAngle < 0) endAngle += 2 * Math.PI;
     
-    // DÃ©terminer la direction de l'arc (on veut l'arc le plus court dans le sens anti-horaire)
+    // Déterminer la direction de l'arc (on veut l'arc le plus court dans le sens anti-horaire)
     let deltaAngle = endAngle - startAngle;
     if (deltaAngle > Math.PI) deltaAngle -= 2 * Math.PI;
     if (deltaAngle < -Math.PI) deltaAngle += 2 * Math.PI;
     
-    // Ã‰chantillonner
+    // Échantillonner
     for (let i = 1; i < numSamples; i++) {
       const t = i / numSamples;
       const angle = startAngle + deltaAngle * t;
@@ -623,13 +623,13 @@ const Warhammer40kLayoutManager = () => {
     return points;
   };
   
-  // VÃ©rifie si un point est dans l'emprise d'un dÃ©cor (rectangle tournÃ©)
+  // Vérifie si un point est dans l'emprise d'un décor (rectangle tourné)
   const isPointInTerrain = (point, terrain) => {
     const corners = getRotatedCorners(terrain);
     return isPointInPolygon({ x: point.x * SCALE, y: point.y * SCALE }, corners);
   };
   
-  // VÃ©rifie si un point est dans un container
+  // Vérifie si un point est dans un container
   const isPointInContainer = (point) => {
     for (const terrain of terrains) {
       if (terrain.type === 'container' && isPointInTerrain(point, terrain)) {
@@ -639,7 +639,7 @@ const Warhammer40kLayoutManager = () => {
     return false;
   };
   
-  // VÃ©rifie si un point est dans n'importe quel dÃ©cor (hors containers)
+  // Vérifie si un point est dans n'importe quel décor (hors containers)
   const isPointInAnyTerrainExceptContainer = (point) => {
     for (const terrain of terrains) {
       if (terrain.type !== 'container' && isPointInTerrain(point, terrain)) {
@@ -649,7 +649,7 @@ const Warhammer40kLayoutManager = () => {
     return false;
   };
   
-  // VÃ©rifie si un point est dans n'importe quel dÃ©cor
+  // Vérifie si un point est dans n'importe quel décor
   const isPointInAnyTerrain = (point) => {
     for (const terrain of terrains) {
       if (isPointInTerrain(point, terrain)) {
@@ -659,7 +659,7 @@ const Warhammer40kLayoutManager = () => {
     return false;
   };
   
-  // GÃ©nÃ¨re la grille de points selon la rÃ©solution
+  // Génère la grille de points selon la résolution
   const generateGrid = (resolution) => {
     const points = [];
     const stepsX = Math.floor(60 / resolution) + 1;
@@ -686,7 +686,7 @@ const Warhammer40kLayoutManager = () => {
     const stepsX = Math.floor(60 / resolution) + 1;
     const stepsY = Math.floor(44 / resolution) + 1;
     
-    // PremiÃ¨re passe : classifier chaque point dans une grille 2D indexÃ©e par entiers
+    // Première passe : classifier chaque point dans une grille 2D indexée par entiers
     const grid = []; // grid[i][j] = { x, y, inZone1, inZone2, inTerrain, inContainer }
     
     for (let i = 0; i < stepsX; i++) {
@@ -730,7 +730,7 @@ const Warhammer40kLayoutManager = () => {
       { di: 1, dj: 1 }     // bas-droite
     ];
     
-    // Fonction pour vÃ©rifier si un point a un voisin EXISTANT dans le No Man's Land
+    // Fonction pour vérifier si un point a un voisin EXISTANT dans le No Man's Land
     const hasNeighborInNoManLand = (i, j) => {
       for (const dir of directions) {
         const neighbor = getNeighbor(i + dir.di, j + dir.dj);
@@ -741,7 +741,7 @@ const Warhammer40kLayoutManager = () => {
       return false;
     };
     
-    // Fonction pour vÃ©rifier si un point du NML a un voisin EXISTANT dans zone 1
+    // Fonction pour vérifier si un point du NML a un voisin EXISTANT dans zone 1
     const hasNeighborInZone1 = (i, j) => {
       for (const dir of directions) {
         const neighbor = getNeighbor(i + dir.di, j + dir.dj);
@@ -752,7 +752,7 @@ const Warhammer40kLayoutManager = () => {
       return false;
     };
     
-    // Fonction pour vÃ©rifier si un point du NML a un voisin EXISTANT dans zone 2
+    // Fonction pour vérifier si un point du NML a un voisin EXISTANT dans zone 2
     const hasNeighborInZone2 = (i, j) => {
       for (const dir of directions) {
         const neighbor = getNeighbor(i + dir.di, j + dir.dj);
@@ -763,7 +763,7 @@ const Warhammer40kLayoutManager = () => {
       return false;
     };
     
-    // DeuxiÃ¨me passe : classifier avec les frontiÃ¨res
+    // Deuxième passe : classifier avec les frontières
     const zone1OnlyPoints = [];
     const zone2OnlyPoints = [];
     const noManLandOnlyPoints = [];
@@ -795,7 +795,7 @@ const Warhammer40kLayoutManager = () => {
             zone2OnlyPoints.push(pointData);
           }
         } else if (!point.inZone1 && !point.inZone2) {
-          // Point dans No Man's Land - vÃ©rifier s'il est adjacent Ã  une zone
+          // Point dans No Man's Land - vérifier s'il est adjacent à une zone
           const adjZone1 = hasNeighborInZone1(i, j);
           const adjZone2 = hasNeighborInZone2(i, j);
           
@@ -820,26 +820,26 @@ const Warhammer40kLayoutManager = () => {
     };
   };
   
-  // RÃ©initialise les rÃ©sultats du mode avancÃ©
+  // Réinitialise les résultats du mode avancé
   const resetAdvancedLoS = () => {
     setAdvancedLoSResults(null);
     setAdvancedLoSProgress(0);
     setGridClassification(null);
   };
   
-  // Met Ã  jour la classification de la grille
+  // Met à jour la classification de la grille
   const updateGridClassification = () => {
     const classification = classifyGridPoints(losResolution);
     setGridClassification(classification);
     return classification;
   };
 
-  // GÃ©nÃ¨re la liste des points sources (zone J1) et cibles (NML + zone J2) pour le calcul des LoS
+  // Génère la liste des points sources (zone J1) et cibles (NML + zone J2) pour le calcul des LoS
   const getLoSPointSets = (classification) => {
     if (!classification) return { sourcePoints: [], targetPointsNML: [], targetPointsZ2: [] };
     
     // Points sources : zone J1 (zone1Only + zone1AndNoManLand)
-    // Exclure les containers (toujours) et les dÃ©cors (si option activÃ©e)
+    // Exclure les containers (toujours) et les décors (si option activée)
     const allZone1Points = [...classification.zone1Only, ...classification.zone1AndNoManLand];
     const sourcePoints = allZone1Points.filter(p => {
       if (p.inContainer) return false;
@@ -864,9 +864,9 @@ const Warhammer40kLayoutManager = () => {
     return { sourcePoints, targetPointsNML, targetPointsZ2 };
   };
 
-  // Calcule le nombre de segments Ã  calculer (en excluant les segments de longueur nulle)
+  // Calcule le nombre de segments à calculer (en excluant les segments de longueur nulle)
   const countLoSSegments = (sourcePoints, targetPointsNML, targetPointsZ2) => {
-    // CrÃ©er un Set des points sources pour vÃ©rifier les doublons rapidement
+    // Créer un Set des points sources pour vérifier les doublons rapidement
     const sourceSet = new Set(sourcePoints.map(p => `${p.x},${p.y}`));
     
     // Compter les segments vers NML (en excluant les points qui sont aussi sources)
@@ -891,10 +891,10 @@ const Warhammer40kLayoutManager = () => {
     };
   };
 
-  // VÃ©rifie si une ligne de vue est bloquÃ©e par les dÃ©cors
-  // Utilise les mÃªmes rÃ¨gles que calculateLoS
+  // Vérifie si une ligne de vue est bloquée par les décors
+  // Utilise les mêmes règles que calculateLoS
   const isLoSBlocked = (source, target, terrainsToCheck) => {
-    // Convertir en pixels pour la vÃ©rification (comme dans calculateLoS)
+    // Convertir en pixels pour la vérification (comme dans calculateLoS)
     const pA = { x: source.x * SCALE, y: source.y * SCALE };
     const pB = { x: target.x * SCALE, y: target.y * SCALE };
     
@@ -902,7 +902,7 @@ const Warhammer40kLayoutManager = () => {
       const buildingPolygon = getBuildingPolygon(terrain);
       
       if (terrain.type === 'forest') {
-        // FORÃŠT : bloquÃ© si la ligne traverse 2 segments ou plus de l'empreinte
+        // FORÊT : bloqué si la ligne traverse 2 segments ou plus de l'empreinte
         const corners = getRotatedCorners(terrain);
         const intersections = findAllIntersections(pA, pB, corners);
         
@@ -910,14 +910,14 @@ const Warhammer40kLayoutManager = () => {
           return true;
         }
       } else if (terrain.type === 'gruin' || terrain.type === 'pruin') {
-        // RUINES : bloquÃ© si traverse le building OU si traverse 2 segments d'empreinte
+        // RUINES : bloqué si traverse le building OU si traverse 2 segments d'empreinte
         if (buildingPolygon) {
-          // VÃ©rifier si traverse le building (polygone en L)
+          // Vérifier si traverse le building (polygone en L)
           const buildingIntersections = findAllIntersections(pA, pB, buildingPolygon);
           if (buildingIntersections.length > 0) {
             return true;
           } else {
-            // Sinon vÃ©rifier si traverse 2 segments de l'empreinte
+            // Sinon vérifier si traverse 2 segments de l'empreinte
             const corners = getRotatedCorners(terrain);
             const intersections = findAllIntersections(pA, pB, corners);
             
@@ -927,7 +927,7 @@ const Warhammer40kLayoutManager = () => {
           }
         }
       } else if (terrain.type === 'container') {
-        // CONTAINER : bloquÃ© si traverse n'importe quel segment
+        // CONTAINER : bloqué si traverse n'importe quel segment
         const corners = getRotatedCorners(terrain);
         const intersection = findFirstIntersection(pA, pB, corners);
         
@@ -940,8 +940,8 @@ const Warhammer40kLayoutManager = () => {
     return false;
   };
 
-  // Fonction de lissage pour Ã©liminer les points isolÃ©s dans l'affichage des surfaces
-  // Un point est considÃ©rÃ© comme isolÃ© si ses 8 voisins ont tous un Ã©tat diffÃ©rent
+  // Fonction de lissage pour éliminer les points isolés dans l'affichage des surfaces
+  // Un point est considéré comme isolé si ses 8 voisins ont tous un état différent
   const smoothVisibilityMap = (visibilityMap, resolution) => {
     const smoothed = new Map(visibilityMap);
     const directions = [
@@ -966,7 +966,7 @@ const Warhammer40kLayoutManager = () => {
         }
       }
       
-      // Si le point a 8 voisins et tous sont en dÃ©saccord, on le corrige
+      // Si le point a 8 voisins et tous sont en désaccord, on le corrige
       if (totalNeighbors === 8 && neighborsWithDifferentState === 8) {
         smoothed.set(key, !isVisible);
       }
@@ -978,22 +978,22 @@ const Warhammer40kLayoutManager = () => {
   // Lance le calcul complet des lignes de vue
   const calculateAdvancedLoS = async () => {
     if (!gridClassification) {
-      alert("Veuillez d'abord gÃ©nÃ©rer la classification de la grille");
+      alert("Veuillez d'abord générer la classification de la grille");
       return;
     }
     
-    // Purger les rÃ©sultats prÃ©cÃ©dents
+    // Purger les résultats précédents
     setAdvancedLoSResults(null);
     setShowVisiblePoints(false);
     setShowVisibleSurfaces(false);
     
-    // RÃ©initialiser le flag d'annulation
+    // Réinitialiser le flag d'annulation
     losCalculationCancelledRef.current = false;
     
     setAdvancedLoSCalculating(true);
     setAdvancedLoSProgress(0);
     
-    // RÃ©cupÃ©rer les ensembles de points
+    // Récupérer les ensembles de points
     const { sourcePoints, targetPointsNML, targetPointsZ2 } = getLoSPointSets(gridClassification);
     
     if (sourcePoints.length === 0) {
@@ -1002,11 +1002,11 @@ const Warhammer40kLayoutManager = () => {
       return;
     }
     
-    // CrÃ©er un Set des points sources pour Ã©viter les segments de longueur nulle
+    // Créer un Set des points sources pour éviter les segments de longueur nulle
     const sourceSet = new Set(sourcePoints.map(p => `${p.x},${p.y}`));
     
-    // PrÃ©parer les rÃ©sultats : pour chaque point cible, est-il visible depuis au moins un point source ?
-    const visibilityNML = new Map(); // clÃ©: "x,y" -> true/false
+    // Préparer les résultats : pour chaque point cible, est-il visible depuis au moins un point source ?
+    const visibilityNML = new Map(); // clé: "x,y" -> true/false
     const visibilityZ2 = new Map();
     
     // Initialiser tous les points cibles comme non visibles
@@ -1020,12 +1020,12 @@ const Warhammer40kLayoutManager = () => {
     const totalTargets = targetPointsNML.length + targetPointsZ2.length;
     let processedTargets = 0;
     
-    // Pour optimiser, on itÃ¨re sur les cibles et on cherche si AU MOINS UN source peut les voir
-    // DÃ¨s qu'on trouve un source qui voit la cible, on passe Ã  la cible suivante
+    // Pour optimiser, on itère sur les cibles et on cherche si AU MOINS UN source peut les voir
+    // Dès qu'on trouve un source qui voit la cible, on passe à la cible suivante
     
     // Calculer pour les cibles NML
     for (const target of targetPointsNML) {
-      // VÃ©rifier si le calcul a Ã©tÃ© annulÃ©
+      // Vérifier si le calcul a été annulé
       if (losCalculationCancelledRef.current) {
         setAdvancedLoSCalculating(false);
         setAdvancedLoSProgress(0);
@@ -1035,26 +1035,26 @@ const Warhammer40kLayoutManager = () => {
       const targetKey = `${target.x},${target.y}`;
       
       for (const source of sourcePoints) {
-        // Ã‰viter les segments de longueur nulle
+        // Éviter les segments de longueur nulle
         if (source.x === target.x && source.y === target.y) continue;
         
         if (!isLoSBlocked(source, target, terrains)) {
           visibilityNML.set(targetKey, true);
-          break; // Pas besoin de vÃ©rifier les autres sources
+          break; // Pas besoin de vérifier les autres sources
         }
       }
       
       processedTargets++;
       if (processedTargets % 100 === 0) {
         setAdvancedLoSProgress(Math.round((processedTargets / totalTargets) * 100));
-        // Permettre Ã  l'UI de se mettre Ã  jour
+        // Permettre à l'UI de se mettre à jour
         await new Promise(resolve => setTimeout(resolve, 0));
       }
     }
     
     // Calculer pour les cibles Zone 2
     for (const target of targetPointsZ2) {
-      // VÃ©rifier si le calcul a Ã©tÃ© annulÃ©
+      // Vérifier si le calcul a été annulé
       if (losCalculationCancelledRef.current) {
         setAdvancedLoSCalculating(false);
         setAdvancedLoSProgress(0);
@@ -1077,14 +1077,14 @@ const Warhammer40kLayoutManager = () => {
       }
     }
     
-    // VÃ©rifier une derniÃ¨re fois si le calcul a Ã©tÃ© annulÃ© avant de sauvegarder
+    // Vérifier une dernière fois si le calcul a été annulé avant de sauvegarder
     if (losCalculationCancelledRef.current) {
       setAdvancedLoSCalculating(false);
       setAdvancedLoSProgress(0);
       return;
     }
     
-    // Compter les rÃ©sultats
+    // Compter les résultats
     const visibleNML = [...visibilityNML.values()].filter(v => v).length;
     const visibleZ2 = [...visibilityZ2.values()].filter(v => v).length;
     
@@ -1105,7 +1105,7 @@ const Warhammer40kLayoutManager = () => {
     
     setAdvancedLoSResults(results);
     
-    // Sauvegarder les rÃ©sultats dans le LocalStorage
+    // Sauvegarder les résultats dans le LocalStorage
     saveLoSResults(selectedLayout, deploymentZone, results);
     
     setAdvancedLoSProgress(100);
@@ -1135,24 +1135,24 @@ const Warhammer40kLayoutManager = () => {
 
   const saveCurrentLayout = () => {
     const debugInfo = {
-      step1: `ðŸ“Š DÃ©but sauvegarde\nTerrains: ${terrains ? terrains.length : 0} dÃ©cors\nLayouts: ${Object.keys(customLayouts).length}/10`,
+      step1: `📊 Début sauvegarde\nTerrains: ${terrains ? terrains.length : 0} décors\nLayouts: ${Object.keys(customLayouts).length}/10`,
       success: false
     };
     
     if (!terrains || terrains.length === 0) {
-      debugInfo.error = "âŒ Aucun layout Ã  sauvegarder";
+      debugInfo.error = "❌ Aucun layout à sauvegarder";
       setSaveDebugInfo(debugInfo);
       return;
     }
     
     if (!layoutNameInput.trim() || layoutNameInput.length > 24) {
-      debugInfo.error = "âŒ Le nom doit contenir entre 1 et 24 caractÃ¨res";
+      debugInfo.error = "❌ Le nom doit contenir entre 1 et 24 caractères";
       setSaveDebugInfo(debugInfo);
       return;
     }
     
     if (Object.keys(customLayouts).length >= MAX_LAYOUTS && !customLayouts[layoutNameInput]) {
-      debugInfo.error = `âŒ Maximum ${MAX_LAYOUTS} layouts personnalisÃ©s atteints`;
+      debugInfo.error = `❌ Maximum ${MAX_LAYOUTS} layouts personnalisés atteints`;
       setSaveDebugInfo(debugInfo);
       return;
     }
@@ -1164,14 +1164,14 @@ const Warhammer40kLayoutManager = () => {
       setCustomLayouts(newCustomLayouts);
       setSelectedLayout(layoutNameInput);
       
-      debugInfo.step4 = `âœ… Layout "${layoutNameInput}" sauvegardÃ© ! (${terrainsCopy.length} dÃ©cors)`;
+      debugInfo.step4 = `✅ Layout "${layoutNameInput}" sauvegardé ! (${terrainsCopy.length} décors)`;
       debugInfo.success = true;
       setSaveDebugInfo(debugInfo);
       
       setShowSaveDialog(false);
       setLayoutNameInput("");
     } catch (error) {
-      debugInfo.error = `âŒ ERREUR: ${error.message}`;
+      debugInfo.error = `❌ ERREUR: ${error.message}`;
       setSaveDebugInfo(debugInfo);
     }
   };
@@ -1183,12 +1183,12 @@ const Warhammer40kLayoutManager = () => {
     }
     
     if (!layoutNameInput.trim() || layoutNameInput.length > 24) {
-      alert("Le nom doit contenir entre 1 et 24 caractÃ¨res");
+      alert("Le nom doit contenir entre 1 et 24 caractères");
       return;
     }
     
     if (customLayouts[layoutNameInput]) {
-      alert("Ce nom existe dÃ©jÃ ");
+      alert("Ce nom existe déjà");
       return;
     }
     
@@ -1211,8 +1211,8 @@ const Warhammer40kLayoutManager = () => {
       setCustomLayouts(newCustomLayouts);
       
       if (selectedLayout === layoutName) {
-        setSelectedLayout("Layout par dÃ©faut");
-        setTerrains(JSON.parse(JSON.stringify(WTC_LAYOUTS["Layout par dÃ©faut"])));
+        setSelectedLayout("Layout par défaut");
+        setTerrains(JSON.parse(JSON.stringify(WTC_LAYOUTS["Layout par défaut"])));
         setPointA(null);
         setPointB(null);
         setLosResult(null);
@@ -1225,7 +1225,7 @@ const Warhammer40kLayoutManager = () => {
   const exportLayoutsToJSON = () => {
     const layoutCount = Object.keys(customLayouts).length;
     if (layoutCount === 0) {
-      alert('Aucun layout personnalisÃ© Ã  exporter');
+      alert('Aucun layout personnalisé à exporter');
       return;
     }
     
@@ -1257,12 +1257,12 @@ const Warhammer40kLayoutManager = () => {
             </style>
           </head>
           <body>
-            <h1>ðŸ“¤ Export des layouts</h1>
+            <h1>📤 Export des layouts</h1>
             <div class="info">
-              <p><strong>${layoutCount} layout(s)</strong> exportÃ©(s) le ${new Date().toLocaleDateString('fr-FR')}</p>
-              <p>ðŸ’¡ Cliquez sur le bouton ci-dessous pour tÃ©lÃ©charger le fichier, ou copiez le contenu.</p>
+              <p><strong>${layoutCount} layout(s)</strong> exporté(s) le ${new Date().toLocaleDateString('fr-FR')}</p>
+              <p>💡 Cliquez sur le bouton ci-dessous pour télécharger le fichier, ou copiez le contenu.</p>
             </div>
-            <button onclick="downloadFile()">ðŸ’¾ TÃ©lÃ©charger le fichier JSON</button>
+            <button onclick="downloadFile()">💾 Télécharger le fichier JSON</button>
             <h3>Contenu :</h3>
             <pre>${jsonString.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</pre>
             <script>
@@ -1296,7 +1296,7 @@ const Warhammer40kLayoutManager = () => {
         
         // Validation du format
         if (!data.layouts || typeof data.layouts !== 'object') {
-          setImportError('Format de fichier invalide : propriÃ©tÃ© "layouts" manquante');
+          setImportError('Format de fichier invalide : propriété "layouts" manquante');
           return;
         }
         
@@ -1311,12 +1311,12 @@ const Warhammer40kLayoutManager = () => {
         // Validation des layouts
         for (const [name, terrains] of Object.entries(importedLayouts)) {
           if (!Array.isArray(terrains)) {
-            setImportError(`Layout "${name}" invalide : doit Ãªtre un tableau de dÃ©cors`);
+            setImportError(`Layout "${name}" invalide : doit être un tableau de décors`);
             return;
           }
           for (const terrain of terrains) {
             if (!terrain.type || !TERRAIN_TYPES[terrain.type]) {
-              setImportError(`Layout "${name}" contient un dÃ©cor avec un type invalide`);
+              setImportError(`Layout "${name}" contient un décor avec un type invalide`);
               return;
             }
           }
@@ -1328,7 +1328,7 @@ const Warhammer40kLayoutManager = () => {
         if (importMode === 'replace') {
           // Remplacer tous les layouts existants
           newCustomLayouts = { ...importedLayouts };
-          resultMessage = `âœ… ${importedCount} layout(s) importÃ©(s) (layouts prÃ©cÃ©dents remplacÃ©s)`;
+          resultMessage = `✅ ${importedCount} layout(s) importé(s) (layouts précédents remplacés)`;
         } else {
           // Fusionner avec les layouts existants
           const currentCount = Object.keys(customLayouts).length;
@@ -1344,7 +1344,7 @@ const Warhammer40kLayoutManager = () => {
             }
             
             let finalName = name;
-            // Si le nom existe dÃ©jÃ , ajouter un suffixe
+            // Si le nom existe déjà, ajouter un suffixe
             if (newCustomLayouts[name]) {
               let suffix = 2;
               while (newCustomLayouts[`${name} (${suffix})`]) {
@@ -1357,9 +1357,9 @@ const Warhammer40kLayoutManager = () => {
             added++;
           }
           
-          resultMessage = `âœ… ${added} layout(s) ajoutÃ©(s)`;
+          resultMessage = `✅ ${added} layout(s) ajouté(s)`;
           if (skipped > 0) {
-            resultMessage += ` (${skipped} ignorÃ©(s) - limite de ${MAX_LAYOUTS} atteinte)`;
+            resultMessage += ` (${skipped} ignoré(s) - limite de ${MAX_LAYOUTS} atteinte)`;
           }
         }
         
@@ -1404,13 +1404,13 @@ const Warhammer40kLayoutManager = () => {
         if (t.id === terrainId) {
           return { ...t, rotation: (t.rotation + delta + 360) % 360 };
         } else if (t.id === prevTerrains.find(ter => ter.id === terrainId)?.symmetricId) {
-          // Le symÃ©trique tourne du mÃªme delta mais garde son dÃ©calage de 180Â°
+          // Le symétrique tourne du même delta mais garde son décalage de 180°
           return { ...t, rotation: (t.rotation + delta + 360) % 360 };
         }
         return t;
       });
     });
-    // Invalider les rÃ©sultats LoS pour ce layout
+    // Invalider les résultats LoS pour ce layout
     invalidateLoSResultsForLayout(selectedLayout);
   };
 
@@ -1425,7 +1425,7 @@ const Warhammer40kLayoutManager = () => {
         return t;
       });
     });
-    // Invalider les rÃ©sultats LoS pour ce layout
+    // Invalider les résultats LoS pour ce layout
     invalidateLoSResultsForLayout(selectedLayout);
   };
 
@@ -1570,7 +1570,7 @@ const Warhammer40kLayoutManager = () => {
       
       setTerrains(currentTerrains);
       setOptimizing(false);
-      // Invalider les rÃ©sultats LoS pour ce layout
+      // Invalider les résultats LoS pour ce layout
       invalidateLoSResultsForLayout(selectedLayout);
     }, 150);
   };
@@ -1673,9 +1673,9 @@ const Warhammer40kLayoutManager = () => {
     
     setTimeout(() => {
       let bestTerrains = [];
-      let maxAttempts = 10; // Nombre maximum de tentatives de gÃ©nÃ©ration complÃ¨te
+      let maxAttempts = 10; // Nombre maximum de tentatives de génération complète
       
-      // Utiliser la configuration dÃ©finie par l'utilisateur
+      // Utiliser la configuration définie par l'utilisateur
       const terrainConfig = [];
       if (configGruin > 0) terrainConfig.push({ type: 'gruin', count: configGruin / 2 });
       if (configPruin > 0) terrainConfig.push({ type: 'pruin', count: configPruin / 2 });
@@ -1700,7 +1700,7 @@ const Warhammer40kLayoutManager = () => {
               const terrainType = TERRAIN_TYPES[config.type];
               const margin = 20;
               
-              // Calculer les limites pour s'assurer que le dÃ©cor reste dans la table
+              // Calculer les limites pour s'assurer que le décor reste dans la table
               const maxX = CENTER_X - terrainType.width - margin;
               const maxY = TABLE_HEIGHT - terrainType.height - margin;
               
@@ -1742,7 +1742,7 @@ const Warhammer40kLayoutManager = () => {
               
               terrain2 = snapTerrainToGrid(terrain2);
               
-              // VÃ©rifier que les deux dÃ©cors sont dans les limites de la table
+              // Vérifier que les deux décors sont dans les limites de la table
               const terrain1InBounds = isTerrainInBounds(terrain1);
               const terrain2InBounds = isTerrainInBounds(terrain2);
               
@@ -1785,7 +1785,7 @@ const Warhammer40kLayoutManager = () => {
           if (!allPlaced) break;
         }
         
-        // Si tous les dÃ©cors sont placÃ©s et dans les limites, on a trouvÃ© un bon layout
+        // Si tous les décors sont placés et dans les limites, on a trouvé un bon layout
         if (allPlaced && newTerrains.length === expectedTotal) {
           const allInBounds = newTerrains.every(t => isTerrainInBounds(t));
           if (allInBounds) {
@@ -1794,7 +1794,7 @@ const Warhammer40kLayoutManager = () => {
           }
         }
         
-        // Garder le meilleur rÃ©sultat partiel
+        // Garder le meilleur résultat partiel
         if (newTerrains.length > bestTerrains.length) {
           bestTerrains = newTerrains;
         }
@@ -1802,11 +1802,11 @@ const Warhammer40kLayoutManager = () => {
       
       if (bestTerrains.length === expectedTotal) {
         setTerrains(bestTerrains);
-        setSelectedLayout("Layout AlÃ©atoire");
-        // Invalider les rÃ©sultats LoS pour le layout alÃ©atoire
-        invalidateLoSResultsForLayout("Layout AlÃ©atoire");
+        setSelectedLayout("Layout Aléatoire");
+        // Invalider les résultats LoS pour le layout aléatoire
+        invalidateLoSResultsForLayout("Layout Aléatoire");
       } else {
-        alert(`GÃ©nÃ©ration incomplÃ¨te (${bestTerrains.length}/${expectedTotal} dÃ©cors). RÃ©essayez.`);
+        alert(`Génération incomplète (${bestTerrains.length}/${expectedTotal} décors). Réessayez.`);
       }
       
       setGenerating(false);
@@ -1866,7 +1866,7 @@ const Warhammer40kLayoutManager = () => {
       const proj1 = projectPolygon(corners1, axis);
       const proj2 = projectPolygon(corners2, axis);
       
-      // Utiliser <= au lieu de < pour permettre aux dÃ©cors de se toucher sans se chevaucher
+      // Utiliser <= au lieu de < pour permettre aux décors de se toucher sans se chevaucher
       if (proj1.max <= proj2.min || proj2.max <= proj1.min) {
         return false;
       }
@@ -1906,10 +1906,10 @@ const Warhammer40kLayoutManager = () => {
 
   // Constante pour le seuil d'aimantation (en pixels)
   const SNAP_THRESHOLD = 2 * SCALE; // 2 pouces en pixels
-  const ROTATION_SNAP_THRESHOLD = 10; // 10 degrÃ©s max pour l'aimantation en rotation
+  const ROTATION_SNAP_THRESHOLD = 10; // 10 degrés max pour l'aimantation en rotation
 
-  // Calcule la position aimantÃ©e d'un terrain (entrÃ©e et sortie en pouces)
-  // Retourne { x, y, rotation } oÃ¹ rotation est la nouvelle rotation si aimantation angulaire
+  // Calcule la position aimantée d'un terrain (entrée et sortie en pouces)
+  // Retourne { x, y, rotation } où rotation est la nouvelle rotation si aimantation angulaire
   const calculateSnappedPosition = (movingTerrain, newX, newY) => {
     // Convertir en pixels pour les calculs
     const newXpx = newX * SCALE;
@@ -1926,7 +1926,7 @@ const Warhammer40kLayoutManager = () => {
 
       const otherCorners = getRotatedCorners(otherTerrain);
 
-      // VÃ©rifier l'aimantation bord Ã  bord
+      // Vérifier l'aimantation bord à bord
       for (let i = 0; i < movingCorners.length; i++) {
         const m1 = movingCorners[i];
         const m2 = movingCorners[(i + 1) % movingCorners.length];
@@ -1935,7 +1935,7 @@ const Warhammer40kLayoutManager = () => {
         if (movingLen === 0) continue;
         const movingNorm = { x: movingEdge.x / movingLen, y: movingEdge.y / movingLen };
         
-        // Angle du bord du dÃ©cor en mouvement
+        // Angle du bord du décor en mouvement
         const movingAngle = Math.atan2(movingEdge.y, movingEdge.x) * 180 / Math.PI;
 
         for (let j = 0; j < otherCorners.length; j++) {
@@ -1946,29 +1946,29 @@ const Warhammer40kLayoutManager = () => {
           if (otherLen === 0) continue;
           const otherNorm = { x: otherEdge.x / otherLen, y: otherEdge.y / otherLen };
           
-          // Angle du bord de l'autre dÃ©cor
+          // Angle du bord de l'autre décor
           const otherAngle = Math.atan2(otherEdge.y, otherEdge.x) * 180 / Math.PI;
 
-          // VÃ©rifier si les bords sont presque parallÃ¨les (produit scalaire proche de Â±1)
+          // Vérifier si les bords sont presque parallèles (produit scalaire proche de ±1)
           const dot = movingNorm.x * otherNorm.x + movingNorm.y * otherNorm.y;
           const absDot = Math.abs(dot);
           
           // Calculer l'angle entre les deux bords
           let angleDiff = Math.abs(movingAngle - otherAngle);
           if (angleDiff > 180) angleDiff = 360 - angleDiff;
-          // Les bords peuvent Ãªtre parallÃ¨les dans le mÃªme sens ou opposÃ©s
+          // Les bords peuvent être parallèles dans le même sens ou opposés
           if (angleDiff > 90) angleDiff = 180 - angleDiff;
           
-          // Seuil plus permissif pour dÃ©tecter les bords "presque parallÃ¨les"
+          // Seuil plus permissif pour détecter les bords "presque parallèles"
           const isAlmostParallel = absDot > Math.cos(ROTATION_SNAP_THRESHOLD * Math.PI / 180);
           
           if (isAlmostParallel) {
-            // Bords presque parallÃ¨les - calculer la distance perpendiculaire
+            // Bords presque parallèles - calculer la distance perpendiculaire
             const perpendicular = { x: -otherNorm.y, y: otherNorm.x };
             const distToLine = (m1.x - o1.x) * perpendicular.x + (m1.y - o1.y) * perpendicular.y;
 
             if (Math.abs(distToLine) < bestDistance) {
-              // VÃ©rifier que les bords se chevauchent (projection)
+              // Vérifier que les bords se chevauchent (projection)
               const proj1Start = (m1.x - o1.x) * otherNorm.x + (m1.y - o1.y) * otherNorm.y;
               const proj1End = (m2.x - o1.x) * otherNorm.x + (m2.y - o1.y) * otherNorm.y;
               const proj2Start = 0;
@@ -1985,16 +1985,16 @@ const Warhammer40kLayoutManager = () => {
                   dy: -distToLine * perpendicular.y
                 };
                 
-                // Calculer la rotation nÃ©cessaire pour aligner les bords
+                // Calculer la rotation nécessaire pour aligner les bords
                 if (angleDiff > 0.5 && angleDiff <= ROTATION_SNAP_THRESHOLD) {
-                  // Calculer la rotation Ã  appliquer
-                  // On veut que le bord du dÃ©cor en mouvement devienne parallÃ¨le au bord cible
+                  // Calculer la rotation à appliquer
+                  // On veut que le bord du décor en mouvement devienne parallèle au bord cible
                   let rotationDelta;
                   if (dot > 0) {
-                    // Bords dans le mÃªme sens
+                    // Bords dans le même sens
                     rotationDelta = otherAngle - movingAngle;
                   } else {
-                    // Bords en sens opposÃ©s
+                    // Bords en sens opposés
                     rotationDelta = otherAngle - movingAngle + 180;
                   }
                   // Normaliser entre -180 et 180
@@ -2022,7 +2022,7 @@ const Warhammer40kLayoutManager = () => {
         }
       }
 
-      // VÃ©rifier l'aimantation coin Ã  coin
+      // Vérifier l'aimantation coin à coin
       for (const mc of movingCorners) {
         for (const oc of otherCorners) {
           const dist = Math.sqrt((mc.x - oc.x) ** 2 + (mc.y - oc.y) ** 2);
@@ -2032,7 +2032,7 @@ const Warhammer40kLayoutManager = () => {
               dx: oc.x - mc.x,
               dy: oc.y - mc.y
             };
-            bestRotationDelta = null; // Pas de rotation pour l'aimantation coin Ã  coin
+            bestRotationDelta = null; // Pas de rotation pour l'aimantation coin à coin
             guides.push({
               type: 'corner',
               x: oc.x,
@@ -2062,7 +2062,7 @@ const Warhammer40kLayoutManager = () => {
     return { x: newX, y: newY };
   };
 
-  // Gestionnaires d'Ã©vÃ©nements pour le glisser-dÃ©poser
+  // Gestionnaires d'événements pour le glisser-déposer
   const handleDragStart = (e, terrain) => {
     if (!editMode || editMethod !== 'drag') return;
     
@@ -2078,7 +2078,7 @@ const Warhammer40kLayoutManager = () => {
     const clientX = e.touches ? e.touches[0].clientX : e.clientX;
     const clientY = e.touches ? e.touches[0].clientY : e.clientY;
     
-    // Prendre en compte le scale pour convertir les coordonnÃ©es
+    // Prendre en compte le scale pour convertir les coordonnées
     const mouseX = (clientX - rect.left) / (SCALE * tableScale);
     const mouseY = (clientY - rect.top) / (SCALE * tableScale);
     
@@ -2102,21 +2102,21 @@ const Warhammer40kLayoutManager = () => {
     const clientX = e.touches ? e.touches[0].clientX : e.clientX;
     const clientY = e.touches ? e.touches[0].clientY : e.clientY;
     
-    // Prendre en compte le scale pour convertir les coordonnÃ©es
+    // Prendre en compte le scale pour convertir les coordonnées
     const mouseX = (clientX - rect.left) / (SCALE * tableScale);
     const mouseY = (clientY - rect.top) / (SCALE * tableScale);
     
     let newX = mouseX - dragOffset.x;
     let newY = mouseY - dragOffset.y;
     
-    // Arrondir Ã  0.5 pouce pour rester sur la grille
+    // Arrondir à 0.5 pouce pour rester sur la grille
     newX = Math.round(newX * 2) / 2;
     newY = Math.round(newY * 2) / 2;
     
     // Utiliser la rotation d'origine pour le calcul d'aimantation
     const terrainWithOriginalRotation = { ...terrain, rotation: dragOriginalRotation };
     
-    // Appliquer l'aimantation (position et Ã©ventuellement rotation)
+    // Appliquer l'aimantation (position et éventuellement rotation)
     const snapped = calculateSnappedPosition(terrainWithOriginalRotation, newX, newY);
     
     // Limiter aux bords de la table
@@ -2126,7 +2126,7 @@ const Warhammer40kLayoutManager = () => {
     snapped.x = Math.max(0, Math.min(maxX, snapped.x));
     snapped.y = Math.max(0, Math.min(maxY, snapped.y));
     
-    // Mettre Ã  jour la position (et rotation si aimantÃ©e) du terrain
+    // Mettre à jour la position (et rotation si aimantée) du terrain
     setTerrains(prev => prev.map(t => {
       if (t.id === selectedTerrain) {
         const updated = { ...t, x: snapped.x * SCALE, y: snapped.y * SCALE };
@@ -2144,21 +2144,21 @@ const Warhammer40kLayoutManager = () => {
 
   const handleDragEnd = () => {
     if (isDragging && selectedTerrain) {
-      // DÃ©placer le dÃ©cor symÃ©trique en consÃ©quence
+      // Déplacer le décor symétrique en conséquence
       const movedTerrain = terrains.find(t => t.id === selectedTerrain);
       if (movedTerrain && movedTerrain.symmetricId) {
         const symmetricTerrain = terrains.find(t => t.id === movedTerrain.symmetricId);
         if (symmetricTerrain) {
-          // Calculer le dÃ©placement effectuÃ© par le dÃ©cor principal
-          // Le symÃ©trique doit faire le dÃ©placement inverse par rapport au centre de la table
+          // Calculer le déplacement effectué par le décor principal
+          // Le symétrique doit faire le déplacement inverse par rapport au centre de la table
           const centerX = 30; // Centre de la table en pouces (60/2)
           const centerY = 22; // Centre de la table en pouces (44/2)
           
-          // Position symÃ©trique = rotation de 180Â° autour du centre
+          // Position symétrique = rotation de 180° autour du centre
           const newSymX = 2 * centerX * SCALE - movedTerrain.x - TERRAIN_TYPES[movedTerrain.type].width;
           const newSymY = 2 * centerY * SCALE - movedTerrain.y - TERRAIN_TYPES[movedTerrain.type].height;
           
-          // Rotation symÃ©trique = rotation du dÃ©cor + 180Â°
+          // Rotation symétrique = rotation du décor + 180°
           let newSymRotation = (movedTerrain.rotation + 180) % 360;
           
           setTerrains(prev => prev.map(t => 
@@ -2166,7 +2166,7 @@ const Warhammer40kLayoutManager = () => {
           ));
         }
       }
-      // Invalider les rÃ©sultats LoS pour ce layout
+      // Invalider les résultats LoS pour ce layout
       invalidateLoSResultsForLayout(selectedLayout);
     }
     setIsDragging(false);
@@ -2207,31 +2207,31 @@ const Warhammer40kLayoutManager = () => {
     const targetX = parseFloat(finePositionX);
     const targetY = parseFloat(finePositionY);
     if (isNaN(targetX) || isNaN(targetY)) {
-      setFinePositionError('Veuillez entrer des coordonnÃ©es valides');
+      setFinePositionError('Veuillez entrer des coordonnées valides');
       return;
     }
 
-    // VÃ©rifier que les coordonnÃ©es cibles sont dans la table
+    // Vérifier que les coordonnées cibles sont dans la table
     if (targetX < 0 || targetX > 60 || targetY < 0 || targetY > 44) {
-      setFinePositionError('Les coordonnÃ©es doivent Ãªtre dans la table (X: 0-60, Y: 0-44)');
+      setFinePositionError('Les coordonnées doivent être dans la table (X: 0-60, Y: 0-44)');
       return;
     }
 
-    // Obtenir la position actuelle du coin sÃ©lectionnÃ©
+    // Obtenir la position actuelle du coin sélectionné
     const corners = getRotatedCorners(terrain);
     const currentCorner = corners[finePositionCorner1];
 
-    // Calculer le dÃ©calage nÃ©cessaire (en pixels)
+    // Calculer le décalage nécessaire (en pixels)
     const dx = targetX * SCALE - currentCorner.x;
     const dy = targetY * SCALE - currentCorner.y;
 
-    // Calculer les nouvelles positions de tous les coins aprÃ¨s translation
+    // Calculer les nouvelles positions de tous les coins après translation
     const newCorners = corners.map(c => ({
       x: (c.x + dx) / SCALE,
       y: (c.y + dy) / SCALE
     }));
 
-    // VÃ©rifier que tous les coins restent dans la table
+    // Vérifier que tous les coins restent dans la table
     for (let i = 0; i < newCorners.length; i++) {
       if (newCorners[i].x < 0 || newCorners[i].x > 60 || newCorners[i].y < 0 || newCorners[i].y > 44) {
         setFinePositionError(`Le coin ${i + 1} sortirait de la table (${newCorners[i].x.toFixed(1)}, ${newCorners[i].y.toFixed(1)})`);
@@ -2239,7 +2239,7 @@ const Warhammer40kLayoutManager = () => {
       }
     }
 
-    // VÃ©rifier aussi le dÃ©cor symÃ©trique
+    // Vérifier aussi le décor symétrique
     const symmetricTerrain = terrains.find(t => t.id === terrain.symmetricId);
     if (symmetricTerrain) {
       const centerX = 30 * SCALE;
@@ -2249,7 +2249,7 @@ const Warhammer40kLayoutManager = () => {
       const newSymX = 2 * centerX - newTerrainX - TERRAIN_TYPES[terrain.type].width;
       const newSymY = 2 * centerY - newTerrainY - TERRAIN_TYPES[terrain.type].height;
       
-      // CrÃ©er un terrain temporaire pour vÃ©rifier ses coins
+      // Créer un terrain temporaire pour vérifier ses coins
       const tempSymTerrain = { ...symmetricTerrain, x: newSymX, y: newSymY };
       const symCorners = getRotatedCorners(tempSymTerrain);
       
@@ -2257,7 +2257,7 @@ const Warhammer40kLayoutManager = () => {
         const cx = symCorners[i].x / SCALE;
         const cy = symCorners[i].y / SCALE;
         if (cx < 0 || cx > 60 || cy < 0 || cy > 44) {
-          setFinePositionError(`Le dÃ©cor symÃ©trique sortirait de la table`);
+          setFinePositionError(`Le décor symétrique sortirait de la table`);
           return;
         }
       }
@@ -2271,7 +2271,7 @@ const Warhammer40kLayoutManager = () => {
       return t;
     }));
 
-    // Mettre Ã  jour le dÃ©cor symÃ©trique
+    // Mettre à jour le décor symétrique
     if (symmetricTerrain) {
       const centerX = 30 * SCALE;
       const centerY = 22 * SCALE;
@@ -2285,10 +2285,10 @@ const Warhammer40kLayoutManager = () => {
       ));
     }
 
-    // Invalider les rÃ©sultats LoS
+    // Invalider les résultats LoS
     invalidateLoSResultsForLayout(selectedLayout);
 
-    // Passer Ã  l'Ã©tape 4
+    // Passer à l'étape 4
     setFinePositionStep(4);
   };
 
@@ -2300,24 +2300,24 @@ const Warhammer40kLayoutManager = () => {
 
     const targetValue = parseFloat(finePositionValue);
     if (isNaN(targetValue)) {
-      setFinePositionError('Veuillez entrer une coordonnÃ©e valide');
+      setFinePositionError('Veuillez entrer une coordonnée valide');
       return;
     }
 
-    // VÃ©rifier que la coordonnÃ©e cible est dans la table
+    // Vérifier que la coordonnée cible est dans la table
     if (finePositionAxis === 'X' && (targetValue < 0 || targetValue > 60)) {
-      setFinePositionError('La coordonnÃ©e X doit Ãªtre entre 0 et 60');
+      setFinePositionError('La coordonnée X doit être entre 0 et 60');
       return;
     }
     if (finePositionAxis === 'Y' && (targetValue < 0 || targetValue > 44)) {
-      setFinePositionError('La coordonnÃ©e Y doit Ãªtre entre 0 et 44');
+      setFinePositionError('La coordonnée Y doit être entre 0 et 44');
       return;
     }
 
-    // Obtenir les positions actuelles des coins (aprÃ¨s la translation)
+    // Obtenir les positions actuelles des coins (après la translation)
     const corners = getRotatedCorners(terrain);
     const pivot = corners[finePositionCorner1]; // Point fixe (coin 1)
-    const corner2 = corners[finePositionCorner2]; // Point Ã  faire pivoter (coin 2)
+    const corner2 = corners[finePositionCorner2]; // Point à faire pivoter (coin 2)
 
     // Calculer la distance entre pivot et corner2
     const distance = Math.sqrt((corner2.x - pivot.x) ** 2 + (corner2.y - pivot.y) ** 2);
@@ -2350,17 +2350,17 @@ const Warhammer40kLayoutManager = () => {
       targetCorner2X = pivot.x + (currentDx >= 0 ? dxTarget : -dxTarget);
     }
 
-    // Calculer l'angle de rotation nÃ©cessaire
+    // Calculer l'angle de rotation nécessaire
     const currentAngle = Math.atan2(corner2.y - pivot.y, corner2.x - pivot.x);
     const targetAngle = Math.atan2(targetCorner2Y - pivot.y, targetCorner2X - pivot.x);
     const rotationDelta = (targetAngle - currentAngle) * 180 / Math.PI;
 
-    // Calculer la nouvelle position du dÃ©cor aprÃ¨s rotation autour du pivot
+    // Calculer la nouvelle position du décor après rotation autour du pivot
     const terrainType = TERRAIN_TYPES[terrain.type];
     const terrainCenterX = terrain.x + terrainType.width / 2;
     const terrainCenterY = terrain.y + terrainType.height / 2;
 
-    // Faire pivoter le centre du dÃ©cor autour du pivot
+    // Faire pivoter le centre du décor autour du pivot
     const cosR = Math.cos(rotationDelta * Math.PI / 180);
     const sinR = Math.sin(rotationDelta * Math.PI / 180);
     const dxCenter = terrainCenterX - pivot.x;
@@ -2372,19 +2372,19 @@ const Warhammer40kLayoutManager = () => {
     const newY = newCenterY - terrainType.height / 2;
     const newRotation = (terrain.rotation + rotationDelta + 360) % 360;
 
-    // VÃ©rifier que tous les coins restent dans la table aprÃ¨s rotation
+    // Vérifier que tous les coins restent dans la table après rotation
     const tempTerrain = { ...terrain, x: newX, y: newY, rotation: newRotation };
     const newCorners = getRotatedCorners(tempTerrain);
     for (let i = 0; i < newCorners.length; i++) {
       const cx = newCorners[i].x / SCALE;
       const cy = newCorners[i].y / SCALE;
       if (cx < 0 || cx > 60 || cy < 0 || cy > 44) {
-        setFinePositionError(`Le coin ${i + 1} sortirait de la table aprÃ¨s rotation (${cx.toFixed(1)}, ${cy.toFixed(1)})`);
+        setFinePositionError(`Le coin ${i + 1} sortirait de la table après rotation (${cx.toFixed(1)}, ${cy.toFixed(1)})`);
         return;
       }
     }
 
-    // VÃ©rifier aussi le dÃ©cor symÃ©trique
+    // Vérifier aussi le décor symétrique
     const symmetricTerrain = terrains.find(t => t.id === terrain.symmetricId);
     if (symmetricTerrain) {
       const centerX = 30 * SCALE;
@@ -2399,7 +2399,7 @@ const Warhammer40kLayoutManager = () => {
         const cx = symCorners[i].x / SCALE;
         const cy = symCorners[i].y / SCALE;
         if (cx < 0 || cx > 60 || cy < 0 || cy > 44) {
-          setFinePositionError(`Le dÃ©cor symÃ©trique sortirait de la table aprÃ¨s rotation`);
+          setFinePositionError(`Le décor symétrique sortirait de la table après rotation`);
           return;
         }
       }
@@ -2413,7 +2413,7 @@ const Warhammer40kLayoutManager = () => {
       return t;
     }));
 
-    // Mettre Ã  jour le dÃ©cor symÃ©trique
+    // Mettre à jour le décor symétrique
     if (symmetricTerrain) {
       const centerX = 30 * SCALE;
       const centerY = 22 * SCALE;
@@ -2426,14 +2426,14 @@ const Warhammer40kLayoutManager = () => {
       ));
     }
 
-    // Invalider les rÃ©sultats LoS
+    // Invalider les résultats LoS
     invalidateLoSResultsForLayout(selectedLayout);
 
-    // RÃ©initialiser le mode
+    // Réinitialiser le mode
     resetFinePosition();
   };
 
-  // Fonction pour gÃ©nÃ©rer l'image d'export
+  // Fonction pour générer l'image d'export
   const generateExportImage = async (options = {}) => {
     const {
       showClassicCoords = false,
@@ -2452,13 +2452,13 @@ const Warhammer40kLayoutManager = () => {
     const TABLE_EXPORT_HEIGHT = EXPORT_HEIGHT - 2 * MARGIN;
     const EXPORT_SCALE = TABLE_EXPORT_WIDTH / TABLE_WIDTH;
 
-    // CrÃ©er un canvas
+    // Créer un canvas
     const canvas = document.createElement('canvas');
     canvas.width = EXPORT_WIDTH;
     canvas.height = EXPORT_HEIGHT;
     const ctx = canvas.getContext('2d');
 
-    // Fond gris foncÃ© (comme l'application)
+    // Fond gris foncé (comme l'application)
     ctx.fillStyle = '#1f2937';
     ctx.fillRect(0, 0, EXPORT_WIDTH, EXPORT_HEIGHT);
 
@@ -2471,7 +2471,7 @@ const Warhammer40kLayoutManager = () => {
     ctx.lineWidth = 4;
     ctx.strokeRect(MARGIN, MARGIN, TABLE_EXPORT_WIDTH, TABLE_EXPORT_HEIGHT);
 
-    // Lignes de centre en pointillÃ©s
+    // Lignes de centre en pointillés
     ctx.strokeStyle = 'rgba(200, 200, 200, 0.5)';
     ctx.lineWidth = 1;
     ctx.setLineDash([5, 5]);
@@ -2490,7 +2490,7 @@ const Warhammer40kLayoutManager = () => {
     
     ctx.setLineDash([]);
 
-    // Dessiner les zones de dÃ©ploiement si demandÃ©
+    // Dessiner les zones de déploiement si demandé
     if (showDeploymentZones && DEPLOYMENT_ZONES[deploymentZone]) {
       const zone = DEPLOYMENT_ZONES[deploymentZone];
       
@@ -2512,7 +2512,7 @@ const Warhammer40kLayoutManager = () => {
           ctx.stroke();
         } else if (zoneData.type === 'path') {
           // Pour Search and Destroy : dessiner manuellement avec l'arc
-          // On utilise les mÃªmes coordonnÃ©es que dans la dÃ©finition
+          // On utilise les mêmes coordonnées que dans la définition
           ctx.beginPath();
           
           if (zoneData.d.toString().includes('30*scale} ${0*scale}')) {
@@ -2552,7 +2552,7 @@ const Warhammer40kLayoutManager = () => {
       drawZone(zone.player2, 'rgba(0, 100, 0, 0.3)');
     }
 
-    // Dessiner les objectifs si demandÃ©
+    // Dessiner les objectifs si demandé
     if (showObjectivesMarkers && OBJECTIVES[deploymentZone]) {
       const objectives = OBJECTIVES[deploymentZone];
       
@@ -2560,7 +2560,7 @@ const Warhammer40kLayoutManager = () => {
         const cx = MARGIN + obj.x * SCALE * EXPORT_SCALE;
         const cy = MARGIN + obj.y * SCALE * EXPORT_SCALE;
         
-        // Cercle extÃ©rieur - zone de contrÃ´le (20mm + 3")
+        // Cercle extérieur - zone de contrôle (20mm + 3")
         ctx.beginPath();
         ctx.arc(cx, cy, OBJECTIVE_OUTER_RADIUS * SCALE * EXPORT_SCALE, 0, Math.PI * 2);
         ctx.fillStyle = 'rgba(168, 85, 247, 0.15)';
@@ -2571,7 +2571,7 @@ const Warhammer40kLayoutManager = () => {
         ctx.stroke();
         ctx.setLineDash([]);
         
-        // Cercle intÃ©rieur - pion d'objectif (40mm diamÃ¨tre)
+        // Cercle intérieur - pion d'objectif (40mm diamètre)
         ctx.beginPath();
         ctx.arc(cx, cy, OBJECTIVE_INNER_RADIUS * SCALE * EXPORT_SCALE, 0, Math.PI * 2);
         ctx.fillStyle = 'rgba(168, 85, 247, 0.4)';
@@ -2582,7 +2582,7 @@ const Warhammer40kLayoutManager = () => {
       }
     }
 
-    // Dessiner les surfaces LoS si demandÃ©
+    // Dessiner les surfaces LoS si demandé
     if (showLoSSurfaces && advancedLoSResults) {
       const smoothedNML = smoothVisibilityMap(advancedLoSResults.visibilityNML, losResolution);
       const smoothedZ2 = smoothVisibilityMap(advancedLoSResults.visibilityZ2, losResolution);
@@ -2607,7 +2607,7 @@ const Warhammer40kLayoutManager = () => {
       }
     }
 
-    // Dessiner les dÃ©cors
+    // Dessiner les décors
     for (const terrain of terrains) {
       const terrainType = TERRAIN_TYPES[terrain.type];
       const cx = MARGIN + (terrain.x + terrainType.width / 2) * EXPORT_SCALE;
@@ -2637,14 +2637,14 @@ const Warhammer40kLayoutManager = () => {
 
       // Dessiner le rectangle ou le polygone
       if (terrainType.buildingPolygon) {
-        // Dessiner l'empreinte en pointillÃ©s (plus visible pour l'export)
+        // Dessiner l'empreinte en pointillés (plus visible pour l'export)
         ctx.setLineDash([4, 4]);
-        ctx.strokeStyle = '#d1d5db'; // Gris clair pour meilleure visibilitÃ©
+        ctx.strokeStyle = '#d1d5db'; // Gris clair pour meilleure visibilité
         ctx.lineWidth = 2;
         ctx.strokeRect(-w / 2, -h / 2, w, h);
         ctx.setLineDash([]);
 
-        // Dessiner le bÃ¢timent
+        // Dessiner le bâtiment
         ctx.beginPath();
         terrainType.buildingPolygon.forEach((p, i) => {
           const px = (p.x * SCALE - terrainType.width / 2) * EXPORT_SCALE;
@@ -2662,7 +2662,7 @@ const Warhammer40kLayoutManager = () => {
         ctx.strokeRect(-w / 2, -h / 2, w, h);
       }
 
-      // Nom du dÃ©cor
+      // Nom du décor
       ctx.fillStyle = 'white';
       ctx.font = 'bold 10px Arial';
       ctx.textAlign = 'center';
@@ -2672,7 +2672,7 @@ const Warhammer40kLayoutManager = () => {
       ctx.restore();
     }
 
-    // Dessiner les coordonnÃ©es classiques si demandÃ©
+    // Dessiner les coordonnées classiques si demandé
     if (showClassicCoords) {
       ctx.font = 'bold 9px Arial';
       ctx.textAlign = 'center';
@@ -2691,7 +2691,7 @@ const Warhammer40kLayoutManager = () => {
       }
     }
 
-    // Dessiner les coordonnÃ©es FEQ si demandÃ©
+    // Dessiner les coordonnées FEQ si demandé
     if (showFEQCoords) {
       const maxVectorLength = 2 * SCALE * EXPORT_SCALE;
       
@@ -2725,7 +2725,7 @@ const Warhammer40kLayoutManager = () => {
               ctx.lineTo(endX, cy);
               ctx.stroke();
               
-              // FlÃ¨che
+              // Flèche
               const arrowSize = 5;
               const arrowDir = goLeft ? 1 : -1;
               ctx.fillStyle = '#3b82f6';
@@ -2762,7 +2762,7 @@ const Warhammer40kLayoutManager = () => {
               ctx.lineTo(cx, endY);
               ctx.stroke();
               
-              // FlÃ¨che
+              // Flèche
               const arrowSize = 5;
               const arrowDir = goUp ? 1 : -1;
               ctx.fillStyle = '#3b82f6';
@@ -2826,7 +2826,7 @@ const Warhammer40kLayoutManager = () => {
                 </style>
               </head>
               <body>
-                <p>Clic droit sur l'image â†’ "Enregistrer l'image sous..." pour tÃ©lÃ©charger</p>
+                <p>Clic droit sur l'image → "Enregistrer l'image sous..." pour télécharger</p>
                 <img src="${url}" alt="Export du layout"/>
                 <p>Layout: ${selectedLayout}</p>
               </body>
@@ -2834,7 +2834,7 @@ const Warhammer40kLayoutManager = () => {
           `);
           newWindow.document.close();
         } else {
-          alert('Impossible d\'ouvrir une nouvelle fenÃªtre. VÃ©rifiez que les popups ne sont pas bloquÃ©es.');
+          alert('Impossible d\'ouvrir une nouvelle fenêtre. Vérifiez que les popups ne sont pas bloquées.');
         }
       }, 'image/png');
     } catch (error) {
@@ -2852,7 +2852,7 @@ const Warhammer40kLayoutManager = () => {
     setExportGenerating(true);
     
     try {
-      // GÃ©nÃ©rer les deux images
+      // Générer les deux images
       const canvas1 = await generateExportImage({
         showClassicCoords: false,
         showFEQCoords: true,
@@ -2885,9 +2885,9 @@ const Warhammer40kLayoutManager = () => {
                             (gridClassification.zone2Only?.filter(p => p.inTerrain).length || 0);
         
         classifStats = `
-          <li>Points classifiÃ©s : Zone J1=${zone1Count}, NML=${nmlCount}, Zone J2=${zone2Count}</li>
-          <li>Points frontiÃ¨re : J1/NML=${frontier1Count}, J2/NML=${frontier2Count}</li>
-          <li>Points dans dÃ©cors : ${terrainCount}</li>
+          <li>Points classifiés : Zone J1=${zone1Count}, NML=${nmlCount}, Zone J2=${zone2Count}</li>
+          <li>Points frontière : J1/NML=${frontier1Count}, J2/NML=${frontier2Count}</li>
+          <li>Points dans décors : ${terrainCount}</li>
         `;
       }
       
@@ -2896,14 +2896,14 @@ const Warhammer40kLayoutManager = () => {
       
       let interpretation = '';
       if (nmlPercent >= 70) {
-        interpretation = 'Le No Man\'s Land est trÃ¨s exposÃ©, favorisant les armÃ©es de tir.';
+        interpretation = 'Le No Man\'s Land est très exposé, favorisant les armées de tir.';
       } else if (nmlPercent >= 40) {
-        interpretation = 'Le No Man\'s Land offre un Ã©quilibre entre couverture et exposition.';
+        interpretation = 'Le No Man\'s Land offre un équilibre entre couverture et exposition.';
       } else {
-        interpretation = 'Le No Man\'s Land est bien couvert, favorisant les armÃ©es de mÃªlÃ©e.';
+        interpretation = 'Le No Man\'s Land est bien couvert, favorisant les armées de mêlée.';
       }
       
-      // CrÃ©er la page HTML du rapport
+      // Créer la page HTML du rapport
       const htmlContent = `
         <!DOCTYPE html>
         <html>
@@ -2945,44 +2945,44 @@ const Warhammer40kLayoutManager = () => {
           </head>
           <body>
             <div class="print-instructions">
-              <strong>ðŸ’¡ Pour sauvegarder en PDF :</strong> Utilisez Ctrl+P (ou Cmd+P sur Mac) puis choisissez "Enregistrer au format PDF"
+              <strong>💡 Pour sauvegarder en PDF :</strong> Utilisez Ctrl+P (ou Cmd+P sur Mac) puis choisissez "Enregistrer au format PDF"
             </div>
             
             <h1>Rapport d'analyse</h1>
             <h2>${selectedLayout} - ${deploymentZone}</h2>
             
-            <h3>Vue du layout avec zones de dÃ©ploiement</h3>
-            <img src="${img1DataUrl}" alt="Layout avec zones de dÃ©ploiement"/>
+            <h3>Vue du layout avec zones de déploiement</h3>
+            <img src="${img1DataUrl}" alt="Layout avec zones de déploiement"/>
             
-            <h3>HypothÃ¨ses de calcul</h3>
+            <h3>Hypothèses de calcul</h3>
             <ul>
-              <li>RÃ©solution de la grille : ${losResolution}"</li>
-              <li>DÃ©ploiement J1 dans les dÃ©cors : ${excludeTerrainPoints ? 'Non (points exclus)' : 'Oui (points inclus)'}</li>
-              <li>Zone de dÃ©ploiement : ${deploymentZone}</li>
+              <li>Résolution de la grille : ${losResolution}"</li>
+              <li>Déploiement J1 dans les décors : ${excludeTerrainPoints ? 'Non (points exclus)' : 'Oui (points inclus)'}</li>
+              <li>Zone de déploiement : ${deploymentZone}</li>
               ${classifStats}
-              <li>Points cibles analysÃ©s : ${nbTargets}</li>
+              <li>Points cibles analysés : ${nbTargets}</li>
             </ul>
             
-            <h3>RÃ©sultats du calcul de lignes de vue</h3>
-            <img src="${img2DataUrl}" alt="Surfaces de visibilitÃ©"/>
-            <p class="legend">LÃ©gende : Vert = visible depuis la zone J1, Rouge = non visible</p>
+            <h3>Résultats du calcul de lignes de vue</h3>
+            <img src="${img2DataUrl}" alt="Surfaces de visibilité"/>
+            <p class="legend">Légende : Vert = visible depuis la zone J1, Rouge = non visible</p>
             
-            <h3>Statistiques de visibilitÃ©</h3>
+            <h3>Statistiques de visibilité</h3>
             <div class="stats-grid">
               <div class="stat-box">
                 <h4>No Man's Land</h4>
                 <p>Points visibles : ${advancedLoSResults.statsNML.visible} / ${advancedLoSResults.statsNML.total}</p>
-                <p><strong>VisibilitÃ© : ${advancedLoSResults.statsNML.percent}%</strong></p>
+                <p><strong>Visibilité : ${advancedLoSResults.statsNML.percent}%</strong></p>
               </div>
               <div class="stat-box">
                 <h4>Zone Joueur 2</h4>
                 <p>Points visibles : ${advancedLoSResults.statsZ2.visible} / ${advancedLoSResults.statsZ2.total}</p>
-                <p><strong>VisibilitÃ© : ${advancedLoSResults.statsZ2.percent}%</strong></p>
+                <p><strong>Visibilité : ${advancedLoSResults.statsZ2.percent}%</strong></p>
               </div>
             </div>
             
             <div class="interpretation">
-              <strong>InterprÃ©tation :</strong> ${interpretation}
+              <strong>Interprétation :</strong> ${interpretation}
             </div>
           </body>
         </html>
@@ -2994,7 +2994,7 @@ const Warhammer40kLayoutManager = () => {
         newWindow.document.write(htmlContent);
         newWindow.document.close();
       } else {
-        alert('Impossible d\'ouvrir une nouvelle fenÃªtre. VÃ©rifiez que les popups ne sont pas bloquÃ©es.');
+        alert('Impossible d\'ouvrir une nouvelle fenêtre. Vérifiez que les popups ne sont pas bloquées.');
       }
     } catch (error) {
       console.error('Erreur export PDF:', error);
@@ -3030,7 +3030,7 @@ const Warhammer40kLayoutManager = () => {
     if (editMode) return;
     
     const rect = e.currentTarget.getBoundingClientRect();
-    // Prendre en compte le scale pour convertir les coordonnÃ©es
+    // Prendre en compte le scale pour convertir les coordonnées
     const x = (e.clientX - rect.left) / tableScale;
     const y = (e.clientY - rect.top) / tableScale;
 
@@ -3061,35 +3061,35 @@ const Warhammer40kLayoutManager = () => {
       let currentIntersection = null;
 
       if (terrain.type === 'forest') {
-        // FORÃŠT : bloquÃ© si la ligne traverse 2 segments ou plus
+        // FORÊT : bloqué si la ligne traverse 2 segments ou plus
         const corners = getRotatedCorners(terrain);
         const intersections = findAllIntersections(pA, pB, corners);
         
         if (intersections.length >= 2) {
           isBlocked = true;
-          currentIntersection = intersections[1]; // Point C = 2Ã¨me intersection
+          currentIntersection = intersections[1]; // Point C = 2ème intersection
         }
       } else if (terrain.type === 'gruin' || terrain.type === 'pruin') {
-        // RUINES : bloquÃ© si traverse le building OU si traverse 2 segments d'empreinte
+        // RUINES : bloqué si traverse le building OU si traverse 2 segments d'empreinte
         if (buildingPolygon) {
-          // VÃ©rifier si traverse le building (polygone en L)
+          // Vérifier si traverse le building (polygone en L)
           const buildingIntersections = findAllIntersections(pA, pB, buildingPolygon);
           if (buildingIntersections.length > 0) {
             isBlocked = true;
-            currentIntersection = buildingIntersections[0]; // 1Ã¨re intersection avec le building
+            currentIntersection = buildingIntersections[0]; // 1ère intersection avec le building
           } else {
-            // Sinon vÃ©rifier si traverse 2 segments de l'empreinte
+            // Sinon vérifier si traverse 2 segments de l'empreinte
             const corners = getRotatedCorners(terrain);
             const intersections = findAllIntersections(pA, pB, corners);
             
             if (intersections.length >= 2) {
               isBlocked = true;
-              currentIntersection = intersections[1]; // Point C = 2Ã¨me intersection
+              currentIntersection = intersections[1]; // Point C = 2ème intersection
             }
           }
         }
       } else {
-        // CONTAINER : bloquÃ© si traverse n'importe quel segment
+        // CONTAINER : bloqué si traverse n'importe quel segment
         const corners = getRotatedCorners(terrain);
         const intersection = findFirstIntersection(pA, pB, corners);
         
@@ -3159,13 +3159,13 @@ const Warhammer40kLayoutManager = () => {
 
     const denom = (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4);
     
-    // TolÃ©rance plus stricte pour Ã©viter les faux nÃ©gatifs
+    // Tolérance plus stricte pour éviter les faux négatifs
     if (Math.abs(denom) < 0.000001) return null;
 
     const t = ((x1 - x3) * (y3 - y4) - (y1 - y3) * (x3 - x4)) / denom;
     const u = -((x1 - x2) * (y1 - y3) - (y1 - y2) * (x1 - x3)) / denom;
 
-    // TolÃ©rance lÃ©gÃ¨re pour les points aux extrÃ©mitÃ©s
+    // Tolérance légère pour les points aux extrémités
     const epsilon = 0.0001;
     if (t >= -epsilon && t <= 1 + epsilon && u >= -epsilon && u <= 1 + epsilon) {
       return {
@@ -3198,7 +3198,7 @@ const Warhammer40kLayoutManager = () => {
     containers: terrains ? terrains.filter(t => t.type === 'container').length : 0
   };
 
-  // Ne pas recalculer les erreurs pendant le drag pour Ã©viter les re-renders
+  // Ne pas recalculer les erreurs pendant le drag pour éviter les re-renders
   const [cachedValidationErrors, setCachedValidationErrors] = useState([]);
   
   useEffect(() => {
@@ -3259,7 +3259,7 @@ const Warhammer40kLayoutManager = () => {
                 value={deploymentZone}
                 onChange={(e) => {
                   setDeploymentZone(e.target.value);
-                  // Si le panneau LoS avancÃ© est ouvert, rÃ©afficher les zones et masquer la grille
+                  // Si le panneau LoS avancé est ouvert, réafficher les zones et masquer la grille
                   if (showAdvancedLoSConfig) {
                     setShowDeployment(true);
                     setShowGridPoints(false);
@@ -3279,7 +3279,7 @@ const Warhammer40kLayoutManager = () => {
           <div className="flex flex-wrap gap-2 mt-3">
             <button
               onClick={() => {
-                // Cycler entre les 3 modes : masquÃ© -> zones seules -> zones + objectifs -> masquÃ©
+                // Cycler entre les 3 modes : masqué -> zones seules -> zones + objectifs -> masqué
                 if (!showDeployment && !showObjectives) {
                   setShowDeployment(true);
                   setShowObjectives(false);
@@ -3311,13 +3311,13 @@ const Warhammer40kLayoutManager = () => {
                 cornersMode === 'classic' ? 'bg-yellow-500 text-black' : 'bg-blue-600'
               }`}
             >
-              ðŸ“ <span>{cornersMode === 'hidden' ? 'Coins' : cornersMode === 'classic' ? 'Classique' : 'FEQ'}</span>
+              📐 <span>{cornersMode === 'hidden' ? 'Coins' : cornersMode === 'classic' ? 'Classique' : 'FEQ'}</span>
             </button>
             <button
               onClick={resetLoS}
               className="flex items-center gap-1 bg-gray-600 hover:bg-gray-700 px-2 py-1.5 rounded text-xs"
             >
-              ðŸ”„ <span>LoS</span>
+              🔄 <span>LoS</span>
             </button>
             <button
               onClick={() => {
@@ -3326,7 +3326,7 @@ const Warhammer40kLayoutManager = () => {
               }}
               className="flex items-center gap-1 bg-indigo-600 hover:bg-indigo-700 px-2 py-1.5 rounded text-xs"
             >
-              ðŸ“¤ <span>Export</span>
+              📤 <span>Export</span>
             </button>
             <button
               onClick={() => {
@@ -3366,13 +3366,13 @@ const Warhammer40kLayoutManager = () => {
                 className="flex items-center gap-1 bg-yellow-600 hover:bg-yellow-700 disabled:bg-gray-600 px-2 py-1.5 rounded text-xs"
               >
                 <Shuffle size={14} />
-                <span>{generating ? '...' : 'AlÃ©a'}</span>
+                <span>{generating ? '...' : 'Aléa'}</span>
               </button>
             )}
             <button
               onClick={() => {
-                // PrÃ©-remplir avec le nom du layout actuel sauf pour "Layout par dÃ©faut"
-                if (selectedLayout !== "Layout par dÃ©faut") {
+                // Pré-remplir avec le nom du layout actuel sauf pour "Layout par défaut"
+                if (selectedLayout !== "Layout par défaut") {
                   setLayoutNameInput(selectedLayout);
                 } else {
                   setLayoutNameInput("");
@@ -3381,7 +3381,7 @@ const Warhammer40kLayoutManager = () => {
               }}
               className="flex items-center gap-1 bg-green-600 hover:bg-green-700 px-2 py-1.5 rounded text-xs"
             >
-              ðŸ’¾ <span>Sauver</span>
+              💾 <span>Sauver</span>
             </button>
             {customLayouts[selectedLayout] && (
               <>
@@ -3389,13 +3389,13 @@ const Warhammer40kLayoutManager = () => {
                   onClick={() => setShowRenameDialog(true)}
                   className="flex items-center gap-1 bg-blue-600 hover:bg-blue-700 px-2 py-1.5 rounded text-xs"
                 >
-                  âœï¸
+                  ✏️
                 </button>
                 <button
                   onClick={() => deleteLayout(selectedLayout)}
                   className="flex items-center gap-1 bg-red-600 hover:bg-red-700 px-2 py-1.5 rounded text-xs"
                 >
-                  ðŸ—‘ï¸
+                  🗑️
                 </button>
               </>
             )}
@@ -3407,26 +3407,26 @@ const Warhammer40kLayoutManager = () => {
               }}
               className="flex items-center gap-1 bg-purple-600 hover:bg-purple-700 px-2 py-1.5 rounded text-xs"
             >
-              ðŸ“‹ <span>Fichier</span>
+              📋 <span>Fichier</span>
             </button>
           </div>
           
           <div className="mt-2 text-xs text-gray-400">
-            Layouts sauvegardÃ©s : {Object.keys(customLayouts).length} / {MAX_LAYOUTS}
+            Layouts sauvegardés : {Object.keys(customLayouts).length} / {MAX_LAYOUTS}
           </div>
 
           <div className="mt-3 flex gap-3 text-xs flex-wrap">
-            <span>ðŸ›ï¸ <strong>{counts.gruins}</strong></span>
-            <span>ðŸšï¸ <strong>{counts.pruins}</strong></span>
-            <span>ðŸŒ² <strong>{counts.forests}</strong></span>
-            <span>ðŸ“¦ <strong>{counts.containers}</strong></span>
+            <span>🏛️ <strong>{counts.gruins}</strong></span>
+            <span>🏚️ <strong>{counts.pruins}</strong></span>
+            <span>🌲 <strong>{counts.forests}</strong></span>
+            <span>📦 <strong>{counts.containers}</strong></span>
             <span className="text-gray-400">Total: {counts.gruins + counts.pruins + counts.forests + counts.containers}</span>
           </div>
         </div>
 
         {showSaveDialog && (
           <div className="bg-gray-800 rounded-lg p-4 mb-4 border-2 border-green-500">
-            <h3 className="font-bold mb-3">ðŸ’¾ Sauvegarder le layout</h3>
+            <h3 className="font-bold mb-3">💾 Sauvegarder le layout</h3>
             <div className="flex gap-2">
               <input
                 type="text"
@@ -3449,14 +3449,14 @@ const Warhammer40kLayoutManager = () => {
                 Annuler
               </button>
             </div>
-            <p className="text-xs text-gray-400 mt-2">{layoutNameInput.length}/24 caractÃ¨res</p>
+            <p className="text-xs text-gray-400 mt-2">{layoutNameInput.length}/24 caractères</p>
             {layoutNameInput.trim() && 
              layoutNameInput.trim() !== selectedLayout && 
              customLayouts[layoutNameInput.trim()] && (
               <div className="mt-2 p-2 bg-orange-900 border border-orange-500 rounded">
                 <p className="text-xs text-orange-300">
-                  âš ï¸ Un layout nommÃ© "{layoutNameInput.trim()}" existe dÃ©jÃ . 
-                  Si vous continuez, il sera Ã©crasÃ© par le layout actuel.
+                  ⚠️ Un layout nommé "{layoutNameInput.trim()}" existe déjà. 
+                  Si vous continuez, il sera écrasé par le layout actuel.
                 </p>
               </div>
             )}
@@ -3465,7 +3465,7 @@ const Warhammer40kLayoutManager = () => {
 
         {showRenameDialog && (
           <div className="bg-gray-800 rounded-lg p-4 mb-4 border-2 border-blue-500">
-            <h3 className="font-bold mb-3">âœï¸ Renommer "{selectedLayout}"</h3>
+            <h3 className="font-bold mb-3">✏️ Renommer "{selectedLayout}"</h3>
             <div className="flex gap-2">
               <input
                 type="text"
@@ -3488,7 +3488,7 @@ const Warhammer40kLayoutManager = () => {
                 Annuler
               </button>
             </div>
-            <p className="text-xs text-gray-400 mt-2">{layoutNameInput.length}/24 caractÃ¨res</p>
+            <p className="text-xs text-gray-400 mt-2">{layoutNameInput.length}/24 caractères</p>
           </div>
         )}
 
@@ -3496,16 +3496,16 @@ const Warhammer40kLayoutManager = () => {
         {showLayoutImportExport && (
           <div className="bg-gray-800 rounded-lg p-4 mb-4 border-2 border-purple-500">
             <div className="flex justify-between items-center mb-4">
-              <h3 className="font-bold">ðŸ“‹ Import / Export de fichier de layouts</h3>
+              <h3 className="font-bold">📋 Import / Export de fichier de layouts</h3>
               <button
                 onClick={() => setShowLayoutImportExport(false)}
                 className="text-gray-400 hover:text-white"
               >
-                âœ•
+                ✕
               </button>
             </div>
             
-            {/* Messages de succÃ¨s/erreur */}
+            {/* Messages de succès/erreur */}
             {importError && (
               <div className="mb-4 p-3 bg-red-900 border border-red-500 rounded">
                 <p className="text-sm text-red-300">{importError}</p>
@@ -3519,27 +3519,27 @@ const Warhammer40kLayoutManager = () => {
             
             {/* Section Export */}
             <div className="mb-6">
-              <h4 className="font-medium mb-2 text-purple-300">ðŸ“¤ Exporter mes layouts</h4>
+              <h4 className="font-medium mb-2 text-purple-300">📤 Exporter mes layouts</h4>
               <p className="text-sm text-gray-400 mb-3">
-                TÃ©lÃ©chargez tous vos layouts personnalisÃ©s ({Object.keys(customLayouts).length}) dans un fichier JSON.
+                Téléchargez tous vos layouts personnalisés ({Object.keys(customLayouts).length}) dans un fichier JSON.
               </p>
               <button
                 onClick={exportLayoutsToJSON}
                 disabled={Object.keys(customLayouts).length === 0}
                 className="w-full bg-purple-600 hover:bg-purple-700 disabled:bg-gray-600 disabled:cursor-not-allowed px-4 py-2 rounded font-medium"
               >
-                ðŸ“¤ Exporter {Object.keys(customLayouts).length} layout(s)
+                📤 Exporter {Object.keys(customLayouts).length} layout(s)
               </button>
             </div>
             
-            {/* SÃ©parateur */}
+            {/* Séparateur */}
             <div className="border-t border-gray-600 my-4"></div>
             
             {/* Section Import */}
             <div>
-              <h4 className="font-medium mb-2 text-purple-300">ðŸ“¥ Importer des layouts</h4>
+              <h4 className="font-medium mb-2 text-purple-300">📥 Importer des layouts</h4>
               <p className="text-sm text-gray-400 mb-3">
-                Chargez des layouts depuis un fichier JSON exportÃ© prÃ©cÃ©demment.
+                Chargez des layouts depuis un fichier JSON exporté précédemment.
               </p>
               
               {/* Mode d'import */}
@@ -3552,7 +3552,7 @@ const Warhammer40kLayoutManager = () => {
                       importMode === 'merge' ? 'bg-purple-600' : 'bg-gray-700'
                     }`}
                   >
-                    ðŸ”€ Fusionner
+                    🔀 Fusionner
                   </button>
                   <button
                     onClick={() => setImportMode('replace')}
@@ -3560,13 +3560,13 @@ const Warhammer40kLayoutManager = () => {
                       importMode === 'replace' ? 'bg-purple-600' : 'bg-gray-700'
                     }`}
                   >
-                    ðŸ”„ Remplacer
+                    🔄 Remplacer
                   </button>
                 </div>
                 <p className="text-xs text-gray-500 mt-1">
                   {importMode === 'merge' 
-                    ? 'Les nouveaux layouts seront ajoutÃ©s aux existants' 
-                    : 'âš ï¸ Tous les layouts existants seront supprimÃ©s'}
+                    ? 'Les nouveaux layouts seront ajoutés aux existants' 
+                    : '⚠️ Tous les layouts existants seront supprimés'}
                 </p>
               </div>
               
@@ -3582,7 +3582,7 @@ const Warhammer40kLayoutManager = () => {
                 onClick={() => fileInputRef.current?.click()}
                 className="w-full bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded font-medium border-2 border-dashed border-gray-500"
               >
-                ðŸ“‚ Choisir un fichier JSON
+                📂 Choisir un fichier JSON
               </button>
             </div>
           </div>
@@ -3590,12 +3590,12 @@ const Warhammer40kLayoutManager = () => {
         {showExportDialog && (
           <div className="bg-gray-800 rounded-lg p-4 mb-4 border-2 border-indigo-500">
             <div className="flex justify-between items-center mb-4">
-              <h3 className="font-bold">ðŸ“¤ Export</h3>
+              <h3 className="font-bold">📤 Export</h3>
               <button
                 onClick={() => setShowExportDialog(false)}
                 className="text-gray-400 hover:text-white"
               >
-                âœ•
+                ✕
               </button>
             </div>
             
@@ -3607,7 +3607,7 @@ const Warhammer40kLayoutManager = () => {
                   exportTab === 'image' ? 'bg-indigo-600' : 'bg-gray-700 hover:bg-gray-600'
                 }`}
               >
-                ðŸ–¼ï¸ Image PNG
+                🖼️ Image PNG
               </button>
               <button
                 onClick={() => setExportTab('pdf')}
@@ -3616,7 +3616,7 @@ const Warhammer40kLayoutManager = () => {
                   exportTab === 'pdf' ? 'bg-indigo-600' : 'bg-gray-700 hover:bg-gray-600'
                 } ${!advancedLoSResults ? 'opacity-50 cursor-not-allowed' : ''}`}
               >
-                ðŸ“„ Rapport PDF
+                📄 Rapport PDF
               </button>
             </div>
             
@@ -3635,7 +3635,7 @@ const Warhammer40kLayoutManager = () => {
                       }}
                       className="w-4 h-4 rounded"
                     />
-                    <span className="text-sm">CoordonnÃ©es mode Classique</span>
+                    <span className="text-sm">Coordonnées mode Classique</span>
                   </label>
                   <label className="flex items-center gap-2 cursor-pointer">
                     <input
@@ -3647,7 +3647,7 @@ const Warhammer40kLayoutManager = () => {
                       }}
                       className="w-4 h-4 rounded"
                     />
-                    <span className="text-sm">CoordonnÃ©es mode FEQ</span>
+                    <span className="text-sm">Coordonnées mode FEQ</span>
                   </label>
                   <label className="flex items-center gap-2 cursor-pointer">
                     <input
@@ -3656,7 +3656,7 @@ const Warhammer40kLayoutManager = () => {
                       onChange={(e) => setExportShowDeployment(e.target.checked)}
                       className="w-4 h-4 rounded"
                     />
-                    <span className="text-sm">Zones de dÃ©ploiement</span>
+                    <span className="text-sm">Zones de déploiement</span>
                   </label>
                   <label className="flex items-center gap-2 cursor-pointer">
                     <input
@@ -3684,7 +3684,7 @@ const Warhammer40kLayoutManager = () => {
                   disabled={exportGenerating}
                   className="w-full bg-indigo-600 hover:bg-indigo-700 disabled:bg-gray-500 px-4 py-2 rounded font-medium"
                 >
-                  {exportGenerating ? 'â³ GÃ©nÃ©ration...' : 'ðŸ“¥ TÃ©lÃ©charger PNG'}
+                  {exportGenerating ? '⏳ Génération...' : '📥 Télécharger PNG'}
                 </button>
               </div>
             )}
@@ -3696,23 +3696,23 @@ const Warhammer40kLayoutManager = () => {
                   <>
                     <p className="text-sm text-gray-400 mb-3">Le rapport inclura :</p>
                     <ul className="text-sm space-y-1 mb-4 list-disc list-inside text-gray-300">
-                      <li>Vue du layout avec zones de dÃ©ploiement et coordonnÃ©es FEQ</li>
-                      <li>HypothÃ¨ses de calcul (rÃ©solution, paramÃ¨tres)</li>
+                      <li>Vue du layout avec zones de déploiement et coordonnées FEQ</li>
+                      <li>Hypothèses de calcul (résolution, paramètres)</li>
                       <li>Carte des surfaces visibles/non visibles</li>
-                      <li>Statistiques de visibilitÃ© dÃ©taillÃ©es</li>
+                      <li>Statistiques de visibilité détaillées</li>
                     </ul>
                     <button
                       onClick={exportPDF}
                       disabled={exportGenerating}
                       className="w-full bg-indigo-600 hover:bg-indigo-700 disabled:bg-gray-500 px-4 py-2 rounded font-medium"
                     >
-                      {exportGenerating ? 'â³ GÃ©nÃ©ration...' : 'ðŸ“¥ TÃ©lÃ©charger PDF'}
+                      {exportGenerating ? '⏳ Génération...' : '📥 Télécharger PDF'}
                     </button>
                   </>
                 ) : (
                   <div className="text-center py-4">
-                    <p className="text-gray-400 mb-2">âš ï¸ Aucun rÃ©sultat de calcul LoS disponible</p>
-                    <p className="text-sm text-gray-500">Effectuez d'abord un calcul avancÃ© de lignes de vue pour gÃ©nÃ©rer un rapport.</p>
+                    <p className="text-gray-400 mb-2">⚠️ Aucun résultat de calcul LoS disponible</p>
+                    <p className="text-sm text-gray-500">Effectuez d'abord un calcul avancé de lignes de vue pour générer un rapport.</p>
                   </div>
                 )}
               </div>
@@ -3722,11 +3722,11 @@ const Warhammer40kLayoutManager = () => {
 
         {showGenerateConfig && (
           <div className="bg-gray-800 rounded-lg p-4 mb-4 border-2 border-yellow-500">
-            <h3 className="font-bold mb-3">ðŸŽ² Configuration de la gÃ©nÃ©ration alÃ©atoire</h3>
+            <h3 className="font-bold mb-3">🎲 Configuration de la génération aléatoire</h3>
             
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
               <div>
-                <label className="block text-sm font-medium mb-1">ðŸ›ï¸ Grandes Ruines (0-8)</label>
+                <label className="block text-sm font-medium mb-1">🏛️ Grandes Ruines (0-8)</label>
                 <select
                   value={configGruin}
                   onChange={(e) => setConfigGruin(Number(e.target.value))}
@@ -3739,7 +3739,7 @@ const Warhammer40kLayoutManager = () => {
               </div>
               
               <div>
-                <label className="block text-sm font-medium mb-1">ðŸšï¸ Petites Ruines (0-8)</label>
+                <label className="block text-sm font-medium mb-1">🏚️ Petites Ruines (0-8)</label>
                 <select
                   value={configPruin}
                   onChange={(e) => setConfigPruin(Number(e.target.value))}
@@ -3752,7 +3752,7 @@ const Warhammer40kLayoutManager = () => {
               </div>
               
               <div>
-                <label className="block text-sm font-medium mb-1">ðŸŒ² ForÃªts (0-4)</label>
+                <label className="block text-sm font-medium mb-1">🌲 Forêts (0-4)</label>
                 <select
                   value={configForest}
                   onChange={(e) => setConfigForest(Number(e.target.value))}
@@ -3765,7 +3765,7 @@ const Warhammer40kLayoutManager = () => {
               </div>
               
               <div>
-                <label className="block text-sm font-medium mb-1">ðŸ“¦ Containers (0-4)</label>
+                <label className="block text-sm font-medium mb-1">📦 Containers (0-4)</label>
                 <select
                   value={configContainer}
                   onChange={(e) => setConfigContainer(Number(e.target.value))}
@@ -3781,16 +3781,16 @@ const Warhammer40kLayoutManager = () => {
             <div className="mb-4 p-2 bg-gray-700 rounded">
               <p className="text-sm">
                 <strong>Total ruines :</strong> {configGruin + configPruin}/12 
-                {configGruin + configPruin > 12 && <span className="text-red-400 ml-2">âš ï¸ Maximum dÃ©passÃ© !</span>}
+                {configGruin + configPruin > 12 && <span className="text-red-400 ml-2">⚠️ Maximum dépassé !</span>}
               </p>
               <p className="text-sm">
-                <strong>Total dÃ©cors :</strong> {configGruin + configPruin + configForest + configContainer}
+                <strong>Total décors :</strong> {configGruin + configPruin + configForest + configContainer}
               </p>
             </div>
             
             {generateError && (
               <div className="bg-red-900 rounded p-3 mb-4">
-                <p className="font-bold mb-1">âš ï¸ Erreurs de configuration :</p>
+                <p className="font-bold mb-1">⚠️ Erreurs de configuration :</p>
                 <ul className="text-sm list-disc list-inside">
                   {generateError.map((err, i) => (
                     <li key={i}>{err}</li>
@@ -3804,7 +3804,7 @@ const Warhammer40kLayoutManager = () => {
                 onClick={startGeneration}
                 className="bg-yellow-600 hover:bg-yellow-700 px-4 py-2 rounded font-bold"
               >
-                ðŸŽ² GÃ©nÃ©rer
+                🎲 Générer
               </button>
               <button
                 onClick={() => {
@@ -3821,71 +3821,71 @@ const Warhammer40kLayoutManager = () => {
 
         {showAdvancedLoSConfig && (
           <div className="bg-gray-800 rounded-lg p-4 mb-4 border-2 border-orange-500">
-            <h3 className="font-bold mb-3">ðŸŽ¯ Configuration du Mode LoS AvancÃ©</h3>
+            <h3 className="font-bold mb-3">🎯 Configuration du Mode LoS Avancé</h3>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
               <div>
-                <label className="block text-sm font-medium mb-2">RÃ©solution de la grille</label>
+                <label className="block text-sm font-medium mb-2">Résolution de la grille</label>
                 <select
                   value={losResolution}
                   onChange={(e) => setLosResolution(Number(e.target.value))}
                   className="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2"
                 >
                   <option value={1}>1" (rapide, ~2 600 points)</option>
-                  <option value={0.5}>0.5" (Ã©quilibrÃ©, ~10 500 points)</option>
-                  <option value={0.25}>0.25" (prÃ©cis, ~42 000 points)</option>
+                  <option value={0.5}>0.5" (équilibré, ~10 500 points)</option>
+                  <option value={0.25}>0.25" (précis, ~42 000 points)</option>
                 </select>
               </div>
               
               <div>
-                <label className="block text-sm font-medium mb-2">DÃ©ploiement dans les dÃ©cors (Zone J1)</label>
+                <label className="block text-sm font-medium mb-2">Déploiement dans les décors (Zone J1)</label>
                 <select
                   value={excludeTerrainPoints ? 'exclude' : 'include'}
                   onChange={(e) => setExcludeTerrainPoints(e.target.value === 'exclude')}
                   className="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2"
                 >
-                  <option value="exclude">Non (exclure les points dans les dÃ©cors)</option>
-                  <option value="include">Oui (inclure les points dans les dÃ©cors)</option>
+                  <option value="exclude">Non (exclure les points dans les décors)</option>
+                  <option value="include">Oui (inclure les points dans les décors)</option>
                 </select>
                 <p className="text-xs text-gray-400 mt-1">
                   {excludeTerrainPoints 
-                    ? "Les figurines du J1 ne se dÃ©ploient pas dans les dÃ©cors" 
-                    : "Les figurines du J1 peuvent se dÃ©ployer dans les dÃ©cors"}
+                    ? "Les figurines du J1 ne se déploient pas dans les décors" 
+                    : "Les figurines du J1 peuvent se déployer dans les décors"}
                 </p>
               </div>
             </div>
             
             <div className="mb-4 p-3 bg-gray-700 rounded">
-              <p className="text-sm font-medium mb-2">ðŸ“Š AperÃ§u de la classification :</p>
+              <p className="text-sm font-medium mb-2">📊 Aperçu de la classification :</p>
               {(() => {
                 const classification = classifyGridPoints(losResolution);
                 const { sourcePoints, targetPointsNML, targetPointsZ2 } = getLoSPointSets(classification);
                 const segmentCounts = countLoSSegments(sourcePoints, targetPointsNML, targetPointsZ2);
                 
-                // Stats dÃ©taillÃ©es
+                // Stats détaillées
                 const allZone1 = [...classification.zone1Only, ...classification.zone1AndNoManLand];
                 const zone1InContainer = allZone1.filter(p => p.inContainer).length;
                 const zone1InTerrain = allZone1.filter(p => p.inTerrain && !p.inContainer).length;
                 
                 return (
                   <div className="text-sm space-y-1">
-                    <p>â€¢ <span className="text-red-400">Points sources (Zone J1)</span> : {sourcePoints.length} points
+                    <p>• <span className="text-red-400">Points sources (Zone J1)</span> : {sourcePoints.length} points
                       {zone1InContainer > 0 && <span className="text-orange-400 ml-1">(-{zone1InContainer} containers)</span>}
-                      {excludeTerrainPoints && zone1InTerrain > 0 && <span className="text-amber-700 ml-1">(-{zone1InTerrain} dÃ©cors)</span>}
+                      {excludeTerrainPoints && zone1InTerrain > 0 && <span className="text-amber-700 ml-1">(-{zone1InTerrain} décors)</span>}
                     </p>
-                    <p>â€¢ <span className="text-gray-300">Cibles No Man's Land</span> : {targetPointsNML.length} points</p>
-                    <p>â€¢ <span className="text-green-400">Cibles Zone J2</span> : {targetPointsZ2.length} points</p>
+                    <p>• <span className="text-gray-300">Cibles No Man's Land</span> : {targetPointsNML.length} points</p>
+                    <p>• <span className="text-green-400">Cibles Zone J2</span> : {targetPointsZ2.length} points</p>
                     <p className="text-gray-400 mt-2 pt-2 border-t border-gray-600">
-                      <strong>Segments Ã  calculer :</strong>
+                      <strong>Segments à calculer :</strong>
                     </p>
                     <p className="text-gray-400">
-                      â€¢ Vers NML : {segmentCounts.segmentsToNML.toLocaleString()}
+                      • Vers NML : {segmentCounts.segmentsToNML.toLocaleString()}
                     </p>
                     <p className="text-gray-400">
-                      â€¢ Vers Zone J2 : {segmentCounts.segmentsToZ2.toLocaleString()}
+                      • Vers Zone J2 : {segmentCounts.segmentsToZ2.toLocaleString()}
                     </p>
                     <p className="text-white font-bold">
-                      â€¢ Total : {segmentCounts.total.toLocaleString()} segments
+                      • Total : {segmentCounts.total.toLocaleString()} segments
                     </p>
                   </div>
                 );
@@ -3915,7 +3915,7 @@ const Warhammer40kLayoutManager = () => {
                     : 'bg-green-600 hover:bg-green-700'
                 }`}
               >
-                {advancedLoSCalculating ? `â›” ArrÃªter (${advancedLoSProgress}%)` : 'ðŸ”¬ Calculer LoS'}
+                {advancedLoSCalculating ? `⛔ Arrêter (${advancedLoSProgress}%)` : '🔬 Calculer LoS'}
               </button>
               <button
                 onClick={() => {
@@ -3930,7 +3930,7 @@ const Warhammer40kLayoutManager = () => {
                   showGridPoints ? 'bg-cyan-600 hover:bg-cyan-700' : 'bg-gray-600 hover:bg-gray-700'
                 }`}
               >
-                {showGridPoints ? 'ðŸ‘ï¸ Masquer grille' : 'ðŸ‘ï¸ Afficher grille'}
+                {showGridPoints ? '👁️ Masquer grille' : '👁️ Afficher grille'}
               </button>
               {advancedLoSResults && (
                 <button
@@ -3945,7 +3945,7 @@ const Warhammer40kLayoutManager = () => {
                     showVisiblePoints ? 'bg-emerald-600 hover:bg-emerald-700' : 'bg-gray-600 hover:bg-gray-700'
                   }`}
                 >
-                  {showVisiblePoints ? 'ðŸŽ¯ Masquer points' : 'ðŸŽ¯ Afficher points'}
+                  {showVisiblePoints ? '🎯 Masquer points' : '🎯 Afficher points'}
                 </button>
               )}
               {advancedLoSResults && (
@@ -3961,7 +3961,7 @@ const Warhammer40kLayoutManager = () => {
                     showVisibleSurfaces ? 'bg-teal-600 hover:bg-teal-700' : 'bg-gray-600 hover:bg-gray-700'
                   }`}
                 >
-                  {showVisibleSurfaces ? 'ðŸ—ºï¸ Masquer surfaces' : 'ðŸ—ºï¸ Afficher surfaces'}
+                  {showVisibleSurfaces ? '🗺️ Masquer surfaces' : '🗺️ Afficher surfaces'}
                 </button>
               )}
               <button
@@ -3970,7 +3970,7 @@ const Warhammer40kLayoutManager = () => {
                   showDeployment ? 'bg-blue-600 hover:bg-blue-700' : 'bg-gray-600 hover:bg-gray-700'
                 }`}
               >
-                {showDeployment ? 'ðŸ—ºï¸ Masquer zones' : 'ðŸ—ºï¸ Afficher zones'}
+                {showDeployment ? '🗺️ Masquer zones' : '🗺️ Afficher zones'}
               </button>
               {advancedLoSMode && (
                 <button
@@ -3984,7 +3984,7 @@ const Warhammer40kLayoutManager = () => {
                   }}
                   className="bg-red-600 hover:bg-red-700 px-4 py-2 rounded"
                 >
-                  DÃ©sactiver
+                  Désactiver
                 </button>
               )}
               <button
@@ -4008,10 +4008,10 @@ const Warhammer40kLayoutManager = () => {
               </div>
             )}
             
-            {/* RÃ©sultats du calcul */}
+            {/* Résultats du calcul */}
             {advancedLoSResults && !advancedLoSCalculating && (
               <div className="mt-4 p-3 bg-gray-700 rounded border-2 border-green-500">
-                <p className="text-sm font-bold mb-2">ðŸ“ˆ RÃ©sultats du calcul LoS :</p>
+                <p className="text-sm font-bold mb-2">📈 Résultats du calcul LoS :</p>
                 <div className="text-sm space-y-2">
                   <div className="flex justify-between items-center">
                     <span className="text-gray-300">No Man's Land visible :</span>
@@ -4043,7 +4043,7 @@ const Warhammer40kLayoutManager = () => {
             
             {showGridPoints && (
               <div className="mt-4 p-3 bg-gray-700 rounded">
-                <p className="text-sm font-medium mb-2">ðŸŽ¨ LÃ©gende des couleurs :</p>
+                <p className="text-sm font-medium mb-2">🎨 Légende des couleurs :</p>
                 <div className="flex gap-3 text-xs flex-wrap">
                   <span className="flex items-center gap-1">
                     <span className="w-3 h-3 rounded-full bg-red-500 inline-block"></span> Zone J1
@@ -4055,16 +4055,16 @@ const Warhammer40kLayoutManager = () => {
                     <span className="w-3 h-3 rounded-full bg-green-500 inline-block"></span> Zone J2
                   </span>
                   <span className="flex items-center gap-1">
-                    <span className="w-3 h-3 rounded-full bg-red-500 border-2 border-purple-500 inline-block"></span> FrontiÃ¨re J1/NML
+                    <span className="w-3 h-3 rounded-full bg-red-500 border-2 border-purple-500 inline-block"></span> Frontière J1/NML
                   </span>
                   <span className="flex items-center gap-1">
-                    <span className="w-3 h-3 rounded-full bg-green-500 border-2 border-purple-500 inline-block"></span> FrontiÃ¨re J2/NML
+                    <span className="w-3 h-3 rounded-full bg-green-500 border-2 border-purple-500 inline-block"></span> Frontière J2/NML
                   </span>
                   <span className="flex items-center gap-1">
-                    <span className="w-3 h-3 rounded-full bg-amber-700 inline-block"></span> DÃ©cor + Zone J1
+                    <span className="w-3 h-3 rounded-full bg-amber-700 inline-block"></span> Décor + Zone J1
                   </span>
                   <span className="flex items-center gap-1">
-                    <span className="w-3 h-3 rounded-full bg-yellow-500 inline-block"></span> DÃ©cor (autres)
+                    <span className="w-3 h-3 rounded-full bg-yellow-500 inline-block"></span> Décor (autres)
                   </span>
                   <span className="flex items-center gap-1">
                     <span className="w-3 h-3 rounded-full bg-orange-500 inline-block"></span> Container
@@ -4078,7 +4078,7 @@ const Warhammer40kLayoutManager = () => {
             
             {showVisiblePoints && advancedLoSResults && (
               <div className="mt-4 p-3 bg-gray-700 rounded">
-                <p className="text-sm font-medium mb-2">ðŸŽ¯ LÃ©gende des points visibles :</p>
+                <p className="text-sm font-medium mb-2">🎯 Légende des points visibles :</p>
                 <div className="flex gap-4 text-xs flex-wrap">
                   <span className="flex items-center gap-1">
                     <span className="w-3 h-3 rounded-full bg-green-500 inline-block"></span> Visible (NML)
@@ -4095,7 +4095,7 @@ const Warhammer40kLayoutManager = () => {
             
             {showVisibleSurfaces && advancedLoSResults && (
               <div className="mt-4 p-3 bg-gray-700 rounded">
-                <p className="text-sm font-medium mb-2">ðŸ—ºï¸ LÃ©gende des surfaces :</p>
+                <p className="text-sm font-medium mb-2">🗺️ Légende des surfaces :</p>
                 <div className="flex gap-4 text-xs flex-wrap">
                   <span className="flex items-center gap-1">
                     <span className="w-4 h-3 bg-green-500 bg-opacity-50 inline-block"></span> NML visible
@@ -4118,7 +4118,7 @@ const Warhammer40kLayoutManager = () => {
         {saveDebugInfo && (
           <div className={`rounded-lg p-4 mb-4 border-4 ${saveDebugInfo.success ? 'bg-green-900 border-green-500' : 'bg-red-900 border-red-500'}`}>
             <h3 className="font-bold text-xl mb-4">
-              {saveDebugInfo.success ? 'âœ… Sauvegarde RÃ©ussie' : 'âŒ ProblÃ¨me'}
+              {saveDebugInfo.success ? '✅ Sauvegarde Réussie' : '❌ Problème'}
             </h3>
             <div className="space-y-3 text-sm font-mono bg-gray-950 p-3 rounded">
               <div className="whitespace-pre-wrap">{saveDebugInfo.step1}</div>
@@ -4137,7 +4137,7 @@ const Warhammer40kLayoutManager = () => {
         <div className={isDragging ? 'invisible' : 'visible'}>
           {validationErrors.length > 0 && (
             <div className="bg-red-900 rounded-lg p-3 mb-3">
-              <h3 className="font-bold mb-1 text-sm">âš ï¸ Erreurs :</h3>
+              <h3 className="font-bold mb-1 text-sm">⚠️ Erreurs :</h3>
               <ul className="text-xs list-disc list-inside">
                 {validationErrors.map((error, i) => (
                   <li key={i}>{error}</li>
@@ -4147,7 +4147,7 @@ const Warhammer40kLayoutManager = () => {
           )}
           {optimizing && (
             <div className="bg-blue-900 rounded-lg p-3 mb-3">
-              <p className="font-bold text-sm">ðŸ§² Optimisation en cours...</p>
+              <p className="font-bold text-sm">🧲 Optimisation en cours...</p>
             </div>
           )}
         </div>
@@ -4161,13 +4161,13 @@ const Warhammer40kLayoutManager = () => {
           const isContainer = currentTerrain.type === 'container';
           const moveStepPixels = isContainer ? containerMoveStep * SCALE : SCALE; // 0.5" ou 1" pour containers, 1" pour autres
           
-          // Calculer les positions extrÃªmes des coins du dÃ©cor sÃ©lectionnÃ©
+          // Calculer les positions extrêmes des coins du décor sélectionné
           const minY = Math.min(...corners.map(c => c.y));
           const maxY = Math.max(...corners.map(c => c.y));
           const minX = Math.min(...corners.map(c => c.x));
           const maxX = Math.max(...corners.map(c => c.x));
           
-          // VÃ©rifier aussi le dÃ©cor symÃ©trique (qui bouge en sens inverse)
+          // Vérifier aussi le décor symétrique (qui bouge en sens inverse)
           const symmetricTerrain = terrains.find(t => t.id === currentTerrain.symmetricId);
           let symMinY = 0, symMaxY = 44 * SCALE, symMinX = 0, symMaxX = 60 * SCALE;
           
@@ -4179,9 +4179,9 @@ const Warhammer40kLayoutManager = () => {
             symMaxX = Math.max(...symCorners.map(c => c.x));
           }
           
-          // VÃ©rifier si on peut bouger sans sortir de la table (0-60" en X, 0-44" en Y)
-          // Le dÃ©cor sÃ©lectionnÃ© bouge de +delta, le symÃ©trique de -delta
-          // TolÃ©rance pour les erreurs d'arrondi des nombres flottants
+          // Vérifier si on peut bouger sans sortir de la table (0-60" en X, 0-44" en Y)
+          // Le décor sélectionné bouge de +delta, le symétrique de -delta
+          // Tolérance pour les erreurs d'arrondi des nombres flottants
           const epsilon = 0.001;
           const canMoveUp = (minY - moveStepPixels) >= -epsilon && (symMaxY + moveStepPixels) <= (44 * SCALE) + epsilon;
           const canMoveDown = (maxY + moveStepPixels) <= (44 * SCALE) + epsilon && (symMinY - moveStepPixels) >= -epsilon;
@@ -4203,19 +4203,19 @@ const Warhammer40kLayoutManager = () => {
           return (
             <div className="bg-gray-800 rounded-lg p-4 mb-4">
               <div className="flex items-center justify-between mb-3">
-                <h3 className="font-bold">Ã‰dition : {currentTerrain.name}</h3>
+                <h3 className="font-bold">Édition : {currentTerrain.name}</h3>
                 <button
                   onClick={optimizeAllTerrains}
                   disabled={optimizing}
                   className="flex items-center gap-2 bg-purple-600 hover:bg-purple-700 disabled:bg-gray-600 px-3 py-2 rounded text-sm"
                 >
-                  ðŸ§² Optimiser tout
+                  🧲 Optimiser tout
                 </button>
               </div>
               
-              {/* SÃ©lecteur de mode d'Ã©dition */}
+              {/* Sélecteur de mode d'édition */}
               <div className="mb-4 p-2 bg-gray-700 rounded">
-                <p className="text-xs text-gray-400 mb-2">Mode d'Ã©dition :</p>
+                <p className="text-xs text-gray-400 mb-2">Mode d'édition :</p>
                 <div className="flex gap-2">
                   <button
                     onClick={() => { setEditMethod('buttons'); resetFinePosition(); }}
@@ -4225,7 +4225,7 @@ const Warhammer40kLayoutManager = () => {
                         : 'bg-gray-600 text-gray-300 hover:bg-gray-500'
                     }`}
                   >
-                    ðŸŽ›ï¸ Boutons
+                    🎛️ Boutons
                   </button>
                   <button
                     onClick={() => { setEditMethod('drag'); resetFinePosition(); }}
@@ -4235,7 +4235,7 @@ const Warhammer40kLayoutManager = () => {
                         : 'bg-gray-600 text-gray-300 hover:bg-gray-500'
                     }`}
                   >
-                    âœ‹ Glisser
+                    ✋ Glisser
                   </button>
                   <button
                     onClick={() => { setEditMethod('fine'); resetFinePosition(); setFinePositionStep(selectedTerrain ? 2 : 1); }}
@@ -4245,12 +4245,12 @@ const Warhammer40kLayoutManager = () => {
                         : 'bg-gray-600 text-gray-300 hover:bg-gray-500'
                     }`}
                   >
-                    ðŸ“ PrÃ©cis
+                    📍 Précis
                   </button>
                 </div>
                 {editMethod === 'drag' && (
                   <p className="text-xs text-gray-400 mt-2">
-                    ðŸ’¡ Faites glisser le dÃ©cor. Il s'aimantera aux dÃ©cors proches.
+                    💡 Faites glisser le décor. Il s'aimantera aux décors proches.
                   </p>
                 )}
               </div>
@@ -4258,34 +4258,34 @@ const Warhammer40kLayoutManager = () => {
               {/* Interface du mode positionnement fin */}
               {editMethod === 'fine' && (
                 <div className="mb-4 p-3 bg-gray-700 rounded border-2 border-blue-500">
-                  <p className="text-sm font-bold mb-2">ðŸ“ Positionnement prÃ©cis</p>
+                  <p className="text-sm font-bold mb-2">📍 Positionnement précis</p>
                   
                   {/* Message d'erreur */}
                   {finePositionError && (
                     <div className="mb-2 p-2 bg-red-900 border border-red-500 rounded">
-                      <p className="text-xs text-red-300">âš ï¸ {finePositionError}</p>
+                      <p className="text-xs text-red-300">⚠️ {finePositionError}</p>
                     </div>
                   )}
                   
-                  {/* Ã‰tape 1 : SÃ©lectionner un dÃ©cor */}
+                  {/* Étape 1 : Sélectionner un décor */}
                   {finePositionStep === 1 && (
                     <div className="text-sm">
-                      <p className="text-yellow-400">Ã‰tape 1/5 : SÃ©lectionnez un dÃ©cor sur la table</p>
+                      <p className="text-yellow-400">Étape 1/5 : Sélectionnez un décor sur la table</p>
                     </div>
                   )}
                   
-                  {/* Ã‰tape 2 : SÃ©lectionner un coin */}
+                  {/* Étape 2 : Sélectionner un coin */}
                   {finePositionStep === 2 && (
                     <div className="text-sm">
-                      <p className="text-yellow-400">Ã‰tape 2/5 : Cliquez sur un coin du dÃ©cor</p>
-                      <p className="text-xs text-gray-400 mt-1">Les coins sont affichÃ©s en cyan sur le dÃ©cor sÃ©lectionnÃ©.</p>
+                      <p className="text-yellow-400">Étape 2/5 : Cliquez sur un coin du décor</p>
+                      <p className="text-xs text-gray-400 mt-1">Les coins sont affichés en cyan sur le décor sélectionné.</p>
                     </div>
                   )}
                   
-                  {/* Ã‰tape 3 : Entrer les coordonnÃ©es */}
+                  {/* Étape 3 : Entrer les coordonnées */}
                   {finePositionStep === 3 && (
                     <div className="text-sm">
-                      <p className="text-yellow-400 mb-2">Ã‰tape 3/5 : CoordonnÃ©es du coin {finePositionCorner1 + 1}</p>
+                      <p className="text-yellow-400 mb-2">Étape 3/5 : Coordonnées du coin {finePositionCorner1 + 1}</p>
                       <div className="flex gap-2 mb-2">
                         <div className="flex-1">
                           <label className="text-xs text-gray-400">X (pouces)</label>
@@ -4319,16 +4319,16 @@ const Warhammer40kLayoutManager = () => {
                         disabled={!finePositionX || !finePositionY}
                         className="w-full bg-green-600 hover:bg-green-700 disabled:bg-gray-500 px-3 py-2 rounded text-sm font-medium"
                       >
-                        âœ“ Appliquer la translation
+                        ✓ Appliquer la translation
                       </button>
                     </div>
                   )}
                   
-                  {/* Ã‰tape 4 : SÃ©lectionner un deuxiÃ¨me coin */}
+                  {/* Étape 4 : Sélectionner un deuxième coin */}
                   {finePositionStep === 4 && (
                     <div className="text-sm">
-                      <p className="text-green-400 mb-2">âœ“ Translation appliquÃ©e !</p>
-                      <p className="text-yellow-400">Ã‰tape 4/5 : Cliquez sur un autre coin pour la rotation</p>
+                      <p className="text-green-400 mb-2">✓ Translation appliquée !</p>
+                      <p className="text-yellow-400">Étape 4/5 : Cliquez sur un autre coin pour la rotation</p>
                       <p className="text-xs text-gray-400 mt-1">Ou cliquez sur "Terminer" si vous ne souhaitez pas de rotation.</p>
                       <button
                         onClick={resetFinePosition}
@@ -4339,12 +4339,12 @@ const Warhammer40kLayoutManager = () => {
                     </div>
                   )}
                   
-                  {/* Ã‰tape 5 : Entrer la coordonnÃ©e pour la rotation */}
+                  {/* Étape 5 : Entrer la coordonnée pour la rotation */}
                   {finePositionStep === 5 && (
                     <div className="text-sm">
-                      <p className="text-yellow-400 mb-2">Ã‰tape 5/5 : Rotation - Coin {finePositionCorner2 + 1}</p>
+                      <p className="text-yellow-400 mb-2">Étape 5/5 : Rotation - Coin {finePositionCorner2 + 1}</p>
                       <div className="mb-2">
-                        <label className="text-xs text-gray-400">Axe Ã  caler :</label>
+                        <label className="text-xs text-gray-400">Axe à caler :</label>
                         <div className="flex gap-2 mt-1">
                           <button
                             onClick={() => { setFinePositionAxis('X'); setFinePositionError(''); }}
@@ -4382,7 +4382,7 @@ const Warhammer40kLayoutManager = () => {
                         disabled={!finePositionValue}
                         className="w-full bg-green-600 hover:bg-green-700 disabled:bg-gray-500 px-3 py-2 rounded text-sm font-medium"
                       >
-                        âœ“ Appliquer la rotation
+                        ✓ Appliquer la rotation
                       </button>
                     </div>
                   )}
@@ -4402,7 +4402,7 @@ const Warhammer40kLayoutManager = () => {
                         canRotateCounterClockwise ? 'bg-blue-600 hover:bg-blue-700' : 'bg-gray-500 cursor-not-allowed opacity-50'
                       }`}
                     >
-                      -15Â°
+                      -15°
                     </button>
                     <button
                       onClick={() => rotateTerrain(currentTerrain.id, -5)}
@@ -4411,7 +4411,7 @@ const Warhammer40kLayoutManager = () => {
                         canRotateCounterClockwise ? 'bg-blue-600 hover:bg-blue-700' : 'bg-gray-500 cursor-not-allowed opacity-50'
                       }`}
                     >
-                      -5Â°
+                      -5°
                     </button>
                     <button
                       onClick={() => {
@@ -4427,9 +4427,9 @@ const Warhammer40kLayoutManager = () => {
                         });
                       }}
                       className="px-3 py-2 rounded bg-green-600 hover:bg-green-700"
-                      title="RÃ©initialiser Ã  0Â° (symÃ©trique Ã  180Â°)"
+                      title="Réinitialiser à 0° (symétrique à 180°)"
                     >
-                      0Â°
+                      0°
                     </button>
                     <button
                       onClick={() => rotateTerrain(currentTerrain.id, 5)}
@@ -4438,7 +4438,7 @@ const Warhammer40kLayoutManager = () => {
                         canRotateClockwise ? 'bg-blue-600 hover:bg-blue-700' : 'bg-gray-500 cursor-not-allowed opacity-50'
                       }`}
                     >
-                      +5Â°
+                      +5°
                     </button>
                     <button
                       onClick={() => rotateTerrain(currentTerrain.id, 15)}
@@ -4447,10 +4447,10 @@ const Warhammer40kLayoutManager = () => {
                         canRotateClockwise ? 'bg-blue-600 hover:bg-blue-700' : 'bg-gray-500 cursor-not-allowed opacity-50'
                       }`}
                     >
-                      +15Â°
+                      +15°
                     </button>
                     <span className="flex items-center px-3 bg-gray-700 rounded">
-                      {currentTerrain.rotation.toFixed(2)}Â°
+                      {currentTerrain.rotation.toFixed(2)}°
                     </span>
                   </div>
                 </div>
@@ -4506,7 +4506,7 @@ const Warhammer40kLayoutManager = () => {
               </div>
               {isContainer && (
                 <div className="mt-4">
-                  <p className="text-sm mb-2">Pas de dÃ©placement :</p>
+                  <p className="text-sm mb-2">Pas de déplacement :</p>
                   <div className="flex gap-2">
                     <button
                       onClick={() => setContainerMoveStep(1)}
@@ -4528,7 +4528,7 @@ const Warhammer40kLayoutManager = () => {
                 </div>
               )}
               <p className="text-xs text-gray-400 mt-2">
-                â„¹ï¸ Modifications appliquÃ©es au dÃ©cor symÃ©trique
+                ℹ️ Modifications appliquées au décor symétrique
               </p>
               </>
               )}
@@ -4544,7 +4544,7 @@ const Warhammer40kLayoutManager = () => {
                       setTerrains(prevTerrains => {
                         return prevTerrains.map(t => {
                           if (t.id === currentTerrain.id) {
-                            // Extraire le numÃ©ro du nom actuel
+                            // Extraire le numéro du nom actuel
                             const match = t.name.match(/(\d+)('?)$/);
                             const num = match ? match[1] : '1';
                             const prime = match ? match[2] : '';
@@ -4559,10 +4559,10 @@ const Warhammer40kLayoutManager = () => {
                         });
                       });
                       
-                      // Mettre Ã  jour le terrain sÃ©lectionnÃ©
+                      // Mettre à jour le terrain sélectionné
                       setSelectedTerrain(prev => ({ ...prev, type: newType }));
                       
-                      // Invalider les rÃ©sultats LoS pour ce layout
+                      // Invalider les résultats LoS pour ce layout
                       invalidateLoSResultsForLayout(selectedLayout);
                     }}
                     className={`px-4 py-2 rounded font-bold ${
@@ -4571,7 +4571,7 @@ const Warhammer40kLayoutManager = () => {
                         : 'bg-gray-600 hover:bg-gray-700'
                     }`}
                   >
-                    {currentTerrain.type === 'gruin' ? 'ðŸšï¸ Convertir en Petite Ruine' : 'ðŸ›ï¸ Convertir en Grande Ruine'}
+                    {currentTerrain.type === 'gruin' ? '🏚️ Convertir en Petite Ruine' : '🏛️ Convertir en Grande Ruine'}
                   </button>
                 </div>
               )}
@@ -4582,7 +4582,7 @@ const Warhammer40kLayoutManager = () => {
         {losResult && !editMode && (
           <div className={`rounded-lg p-4 mb-4 ${losResult.blocked ? 'bg-red-900' : 'bg-green-900'}`}>
             <h3 className="font-bold text-lg mb-2">
-              {losResult.blocked ? 'ðŸš« BLOQUÃ‰E' : 'âœ… DÃ‰GAGÃ‰E'}
+              {losResult.blocked ? '🚫 BLOQUÉE' : '✅ DÉGAGÉE'}
             </h3>
             {losResult.blocked && <p>Par : {losResult.blockingTerrain}</p>}
             <p>Distance : {(losResult.distance / SCALE).toFixed(1)}"</p>
@@ -4618,7 +4618,7 @@ const Warhammer40kLayoutManager = () => {
             onTouchEnd={editMethod === 'drag' ? handleDragEnd : undefined}
             onTouchCancel={editMethod === 'drag' ? handleDragEnd : undefined}
           >
-            {/* DÃ©finition du marker pour les flÃ¨ches FEQ */}
+            {/* Définition du marker pour les flèches FEQ */}
             <svg className="absolute" width="0" height="0">
               <defs>
                 <marker
@@ -4634,9 +4634,9 @@ const Warhammer40kLayoutManager = () => {
               </defs>
             </svg>
             
-            {/* Lignes de centre en pointillÃ©s */}
+            {/* Lignes de centre en pointillés */}
             <svg className="absolute top-0 left-0 pointer-events-none" width={TABLE_WIDTH} height={TABLE_HEIGHT} style={{ zIndex: 0 }}>
-              {/* Ligne verticale (30;0) Ã  (30;44) */}
+              {/* Ligne verticale (30;0) à (30;44) */}
               <line
                 x1={30 * SCALE}
                 y1={0}
@@ -4646,7 +4646,7 @@ const Warhammer40kLayoutManager = () => {
                 strokeWidth="1"
                 strokeDasharray="5,5"
               />
-              {/* Ligne horizontale (0;22) Ã  (60;22) */}
+              {/* Ligne horizontale (0;22) à (60;22) */}
               <line
                 x1={0}
                 y1={22 * SCALE}
@@ -4698,7 +4698,7 @@ const Warhammer40kLayoutManager = () => {
               <svg className="absolute top-0 left-0 pointer-events-none" width={TABLE_WIDTH} height={TABLE_HEIGHT} style={{ zIndex: 2 }}>
                 {OBJECTIVES[deploymentZone].map((obj, idx) => (
                   <React.Fragment key={`objective-${idx}`}>
-                    {/* Cercle extÃ©rieur - zone de contrÃ´le (20mm + 3") */}
+                    {/* Cercle extérieur - zone de contrôle (20mm + 3") */}
                     <circle
                       cx={obj.x * SCALE}
                       cy={obj.y * SCALE}
@@ -4708,7 +4708,7 @@ const Warhammer40kLayoutManager = () => {
                       strokeWidth="2"
                       strokeDasharray="4,2"
                     />
-                    {/* Cercle intÃ©rieur - pion d'objectif (40mm diamÃ¨tre) */}
+                    {/* Cercle intérieur - pion d'objectif (40mm diamètre) */}
                     <circle
                       cx={obj.x * SCALE}
                       cy={obj.y * SCALE}
@@ -4722,7 +4722,7 @@ const Warhammer40kLayoutManager = () => {
               </svg>
             )}
 
-            {/* Affichage des points de la grille pour le mode LoS avancÃ© */}
+            {/* Affichage des points de la grille pour le mode LoS avancé */}
             {showGridPoints && gridClassification && (
               <svg className="absolute top-0 left-0 pointer-events-none" width={TABLE_WIDTH} height={TABLE_HEIGHT} style={{ zIndex: 2 }}>
                 {/* Points du No Man's Land uniquement (en gris) */}
@@ -4745,7 +4745,7 @@ const Warhammer40kLayoutManager = () => {
                     fill={point.inContainer ? "rgba(249, 115, 22, 0.9)" : point.inTerrain ? "rgba(234, 179, 8, 0.8)" : "rgba(34, 197, 94, 0.8)"}
                   />
                 ))}
-                {/* Points Zone 2 + No Man's Land (frontiÃ¨re - en vert/violet) */}
+                {/* Points Zone 2 + No Man's Land (frontière - en vert/violet) */}
                 {gridClassification.zone2AndNoManLand.map((point, idx) => (
                   <circle
                     key={`z2nml-${idx}`}
@@ -4773,7 +4773,7 @@ const Warhammer40kLayoutManager = () => {
                     />
                   );
                 })}
-                {/* Points Zone 1 + No Man's Land (frontiÃ¨re - en rouge/violet) */}
+                {/* Points Zone 1 + No Man's Land (frontière - en rouge/violet) */}
                 {gridClassification.zone1AndNoManLand.map((point, idx) => {
                   const isInTerrainZone1 = point.inTerrain && !point.inContainer;
                   const isExcluded = excludeTerrainPoints && point.inTerrain && !point.inContainer;
@@ -4792,7 +4792,7 @@ const Warhammer40kLayoutManager = () => {
               </svg>
             )}
 
-            {/* Affichage des points visibles (rÃ©sultats du calcul LoS) */}
+            {/* Affichage des points visibles (résultats du calcul LoS) */}
             {showVisiblePoints && advancedLoSResults && (
               <svg className="absolute top-0 left-0 pointer-events-none" width={TABLE_WIDTH} height={TABLE_HEIGHT} style={{ zIndex: 2 }}>
                 {/* Points visibles du No Man's Land (en vert clair) */}
@@ -4826,13 +4826,13 @@ const Warhammer40kLayoutManager = () => {
 
             {/* Affichage des surfaces visibles/non visibles */}
             {showVisibleSurfaces && advancedLoSResults && (() => {
-              // Appliquer le lissage pour Ã©liminer les points isolÃ©s
+              // Appliquer le lissage pour éliminer les points isolés
               const smoothedNML = smoothVisibilityMap(advancedLoSResults.visibilityNML, losResolution);
               const smoothedZ2 = smoothVisibilityMap(advancedLoSResults.visibilityZ2, losResolution);
               
               return (
               <svg className="absolute top-0 left-0 pointer-events-none" width={TABLE_WIDTH} height={TABLE_HEIGHT} style={{ zIndex: 2 }}>
-                {/* CarrÃ©s pour le No Man's Land */}
+                {/* Carrés pour le No Man's Land */}
                 {[...smoothedNML.entries()].map(([key, isVisible], idx) => {
                   const [x, y] = key.split(',').map(Number);
                   const halfSize = (losResolution * SCALE) / 2;
@@ -4848,7 +4848,7 @@ const Warhammer40kLayoutManager = () => {
                     />
                   );
                 })}
-                {/* CarrÃ©s pour la Zone 2 */}
+                {/* Carrés pour la Zone 2 */}
                 {[...smoothedZ2.entries()].map(([key, isVisible], idx) => {
                   const [x, y] = key.split(',').map(Number);
                   const halfSize = (losResolution * SCALE) / 2;
@@ -4868,7 +4868,7 @@ const Warhammer40kLayoutManager = () => {
               );
             })()}
 
-            {/* Guides d'aimantation pendant le glisser-dÃ©poser */}
+            {/* Guides d'aimantation pendant le glisser-déposer */}
             {isDragging && snapGuidesRef.current.length > 0 && (
               <svg className="absolute top-0 left-0 pointer-events-none" width={TABLE_WIDTH} height={TABLE_HEIGHT} style={{ zIndex: 10 }}>
                 {snapGuidesRef.current.map((guide, idx) => (
@@ -4906,7 +4906,7 @@ const Warhammer40kLayoutManager = () => {
               
               const shouldShowCornersClassic = cornersMode === 'classic' && (!editMode || isSelected || (selectedTerrain && terrain.id === selectedTerrain.symmetricId));
               const shouldShowCornersFEQ = cornersMode === 'feq' && (!editMode || isSelected || (selectedTerrain && terrain.id === selectedTerrain.symmetricId));
-              // En mode fine, afficher les coins cliquables sur le dÃ©cor sÃ©lectionnÃ© (Ã©tapes 2, 3, 4, 5)
+              // En mode fine, afficher les coins cliquables sur le décor sélectionné (étapes 2, 3, 4, 5)
               const shouldShowFineCorners = editMode && editMethod === 'fine' && isSelected && (finePositionStep >= 2 && finePositionStep <= 5);
               
               return (
@@ -4929,7 +4929,7 @@ const Warhammer40kLayoutManager = () => {
                       onClick={(e) => {
                         if (editMode) {
                           e.stopPropagation();
-                          // En mode fine, rÃ©initialiser si on change de dÃ©cor
+                          // En mode fine, réinitialiser si on change de décor
                           if (editMethod === 'fine' && selectedTerrain?.id !== terrain.id) {
                             resetFinePosition();
                             setFinePositionStep(2);
@@ -4974,7 +4974,7 @@ const Warhammer40kLayoutManager = () => {
                         onClick={(e) => {
                           if (editMode) {
                             e.stopPropagation();
-                            // En mode fine, rÃ©initialiser si on change de dÃ©cor
+                            // En mode fine, réinitialiser si on change de décor
                             if (editMethod === 'fine' && selectedTerrain?.id !== terrain.id) {
                               resetFinePosition();
                               setFinePositionStep(2);
@@ -5028,7 +5028,7 @@ const Warhammer40kLayoutManager = () => {
                     </>
                   )}
                   
-                  {/* Mode classique : afficher coordonnÃ©es (X;Y) */}
+                  {/* Mode classique : afficher coordonnées (X;Y) */}
                   {shouldShowCornersClassic && corners.map((corner, idx) => (
                     <div
                       key={`${terrain.id}-corner-${idx}`}
@@ -5138,23 +5138,23 @@ const Warhammer40kLayoutManager = () => {
                   
                   {/* Coins cliquables en mode positionnement fin */}
                   {shouldShowFineCorners && corners.map((corner, idx) => {
-                    // DÃ©terminer le style du coin selon l'Ã©tape et s'il est sÃ©lectionnÃ©
+                    // Déterminer le style du coin selon l'étape et s'il est sélectionné
                     let cornerStyle = '';
                     let isClickable = false;
                     
                     if (finePositionStep === 2) {
-                      // Ã‰tape 2 : tous les coins sont cliquables
+                      // Étape 2 : tous les coins sont cliquables
                       cornerStyle = 'bg-cyan-500 border-white hover:bg-cyan-400 cursor-pointer';
                       isClickable = true;
                     } else if (finePositionStep === 3) {
-                      // Ã‰tape 3 : le coin 1 est sÃ©lectionnÃ© (vert), les autres sont grisÃ©s
+                      // Étape 3 : le coin 1 est sélectionné (vert), les autres sont grisés
                       if (idx === finePositionCorner1) {
                         cornerStyle = 'bg-green-500 border-white';
                       } else {
                         cornerStyle = 'bg-gray-500 border-gray-400 opacity-50';
                       }
                     } else if (finePositionStep === 4) {
-                      // Ã‰tape 4 : le coin 1 est vert, les autres sont cliquables (cyan)
+                      // Étape 4 : le coin 1 est vert, les autres sont cliquables (cyan)
                       if (idx === finePositionCorner1) {
                         cornerStyle = 'bg-green-500 border-white';
                       } else {
@@ -5162,7 +5162,7 @@ const Warhammer40kLayoutManager = () => {
                         isClickable = true;
                       }
                     } else if (finePositionStep === 5) {
-                      // Ã‰tape 5 : coin 1 vert, coin 2 orange, les autres grisÃ©s
+                      // Étape 5 : coin 1 vert, coin 2 orange, les autres grisés
                       if (idx === finePositionCorner1) {
                         cornerStyle = 'bg-green-500 border-white';
                       } else if (idx === finePositionCorner2) {
