@@ -2494,7 +2494,7 @@ const Warhammer40kLayoutManager = () => {
     if (showDeploymentZones && DEPLOYMENT_ZONES[deploymentZone]) {
       const zone = DEPLOYMENT_ZONES[deploymentZone];
       
-      const drawZone = (zoneData, color) => {
+      const drawZone = (zoneData, color, isPlayer1) => {
         ctx.fillStyle = color;
         ctx.strokeStyle = color.replace('0.25', '0.8').replace('0.3', '0.8');
         ctx.lineWidth = 2;
@@ -2512,44 +2512,38 @@ const Warhammer40kLayoutManager = () => {
           ctx.stroke();
         } else if (zoneData.type === 'path') {
           // Pour Search and Destroy : dessiner manuellement avec l'arc
-          // On utilise les mêmes coordonnées que dans la définition
+          const s = SCALE * EXPORT_SCALE;
+          const r = 9 * s;
+          
           ctx.beginPath();
           
-          if (zoneData.d.toString().includes('30*scale} ${0*scale}')) {
+          if (isPlayer1) {
             // Player 1 : (30;0) -> (60;0) -> (60;22) -> (39;22) -> arc vers (30;13) -> fermer
-            const s = SCALE * EXPORT_SCALE;
             ctx.moveTo(MARGIN + 30 * s, MARGIN + 0 * s);
             ctx.lineTo(MARGIN + 60 * s, MARGIN + 0 * s);
             ctx.lineTo(MARGIN + 60 * s, MARGIN + 22 * s);
             ctx.lineTo(MARGIN + 39 * s, MARGIN + 22 * s);
-            // Arc de (39;22) vers (30;13) avec rayon 9
-            const r = 9 * s;
-            const centerX = MARGIN + 30 * s;
-            const centerY = MARGIN + 22 * s;
-            ctx.arc(centerX, centerY, r, 0, -Math.PI / 2, true);
-            ctx.closePath();
+            // Arc de (39;22) vers (30;13) - centre à (30;22), de 0 rad à -π/2 rad (sens antihoraire)
+            ctx.arc(MARGIN + 30 * s, MARGIN + 22 * s, r, 0, -Math.PI / 2, true);
+            ctx.lineTo(MARGIN + 30 * s, MARGIN + 0 * s);
           } else {
             // Player 2 : (0;22) -> (21;22) -> arc vers (30;31) -> (30;44) -> (0;44) -> fermer
-            const s = SCALE * EXPORT_SCALE;
             ctx.moveTo(MARGIN + 0 * s, MARGIN + 22 * s);
             ctx.lineTo(MARGIN + 21 * s, MARGIN + 22 * s);
-            // Arc de (21;22) vers (30;31) avec rayon 9
-            const r = 9 * s;
-            const centerX = MARGIN + 30 * s;
-            const centerY = MARGIN + 22 * s;
-            ctx.arc(centerX, centerY, r, Math.PI, Math.PI / 2, true);
+            // Arc de (21;22) vers (30;31) - centre à (30;22), de π rad à π/2 rad (sens antihoraire)
+            ctx.arc(MARGIN + 30 * s, MARGIN + 22 * s, r, Math.PI, Math.PI / 2, true);
             ctx.lineTo(MARGIN + 30 * s, MARGIN + 44 * s);
             ctx.lineTo(MARGIN + 0 * s, MARGIN + 44 * s);
-            ctx.closePath();
           }
           
+          ctx.closePath();
           ctx.fill();
           ctx.stroke();
         }
       };
       
-      drawZone(zone.player1, 'rgba(139, 0, 0, 0.25)');
-      drawZone(zone.player2, 'rgba(0, 100, 0, 0.3)');
+      drawZone(zone.player1, 'rgba(139, 0, 0, 0.25)', true);
+      drawZone(zone.player2, 'rgba(0, 100, 0, 0.3)', false);
     }
 
     // Dessiner les objectifs si demandé
