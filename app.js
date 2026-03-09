@@ -218,6 +218,11 @@ const Warhammer40kLayoutManager = () => {
   const [cornersMode, setCornersMode] = useState('hidden'); // 'hidden', 'classic', 'feq'
   const [optimizing, setOptimizing] = useState(false);
   
+  // Détection souris et suivi en temps réel
+  const [hasMouse, setHasMouse] = useState(false);
+  const [mousePosition, setMousePosition] = useState(null); // Position actuelle de la souris sur la table
+  const [liveDistance, setLiveDistance] = useState(null); // Distance en temps réel entre pointA et la souris
+  
   // Charger les layouts personnalisés depuis localStorage
   const [customLayouts, setCustomLayouts] = useState(() => {
     try {
@@ -352,6 +357,18 @@ const Warhammer40kLayoutManager = () => {
     calculateScale();
     window.addEventListener('resize', calculateScale);
     return () => window.removeEventListener('resize', calculateScale);
+  }, []);
+
+  // Détection de la souris (vs tactile uniquement)
+  useEffect(() => {
+    const handleMouseMove = () => {
+      setHasMouse(true);
+      // On retire le listener après la première détection pour optimiser
+      window.removeEventListener('mousemove', handleMouseMove);
+    };
+    
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
 
   // Sauvegarder les layouts personnalisés dans localStorage
@@ -3151,13 +3168,50 @@ const Warhammer40kLayoutManager = () => {
     if (!pointA) {
       setPointA({ x, y });
       setLosResult(null);
+      setLiveDistance(null);
     } else if (!pointB) {
       setPointB({ x, y });
       calculateLoS({ x, y }, pointA);
+      setLiveDistance(null);
+      setMousePosition(null);
     } else {
       setPointA({ x, y });
       setPointB(null);
       setLosResult(null);
+      setLiveDistance(null);
+    }
+  };
+
+  // Gestion du mouvement de la souris pour afficher la distance en temps réel
+  const handleTableMouseMove = (e) => {
+    // Ne fonctionne que si : souris détectée, pas en mode édition, pointA défini mais pas pointB
+    if (!hasMouse || editMode || !pointA || pointB) return;
+    
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / (tableScale * userZoom);
+    const y = (e.clientY - rect.top) / (tableScale * userZoom);
+    
+    // Vérifier que la souris est bien sur la table
+    if (x < 0 || x > TABLE_WIDTH || y < 0 || y > TABLE_HEIGHT) {
+      setMousePosition(null);
+      setLiveDistance(null);
+      return;
+    }
+    
+    setMousePosition({ x, y });
+    
+    // Calculer la distance entre pointA et la position actuelle
+    const dx = x - pointA.x;
+    const dy = y - pointA.y;
+    const distance = Math.sqrt(dx * dx + dy * dy);
+    setLiveDistance(distance);
+  };
+
+  // Quand la souris quitte la table
+  const handleTableMouseLeave = () => {
+    if (!editMode && pointA && !pointB) {
+      setMousePosition(null);
+      setLiveDistance(null);
     }
   };
 
@@ -4754,9 +4808,19 @@ const Warhammer40kLayoutManager = () => {
               touchAction: 'none'
             }}
             onClick={handleTableClick}
-            onMouseMove={editMethod === 'drag' ? handleDragMove : undefined}
+            onMouseMove={(e) => {
+              if (editMethod === 'drag') {
+                handleDragMove(e);
+              }
+              handleTableMouseMove(e);
+            }}
             onMouseUp={editMethod === 'drag' ? handleDragEnd : undefined}
-            onMouseLeave={editMethod === 'drag' ? handleDragEnd : undefined}
+            onMouseLeave={(e) => {
+              if (editMethod === 'drag') {
+                handleDragEnd(e);
+              }
+              handleTableMouseLeave();
+            }}
           >
             {/* Définition du marker pour les flèches FEQ */}
             <svg className="absolute" width="0" height="0">
@@ -5343,6 +5407,35 @@ const Warhammer40kLayoutManager = () => {
 
             {!editMode && pointB && (
               <div className="absolute w-4 h-4 bg-red-500 rounded-full border-2 border-white z-30" style={{ left: pointB.x - 8, top: pointB.y - 8 }} />
+            )}
+
+            {/* Ligne et distance en temps réel (souris uniquement) */}
+            {!editMode && hasMouse && pointA && !pointB && mousePosition && liveDistance !== null && (
+              <>
+                <svg className="absolute top-0 left-0 pointer-events-none z-25" width={TABLE_WIDTH} height={TABLE_HEIGHT}>
+                  <line
+                    x1={pointA.x}
+                    y1={pointA.y}
+                    x2={mousePosition.x}
+                    y2={mousePosition.y}
+                    stroke="#60a5fa"
+                    strokeWidth="2"
+                    strokeDasharray="5,5"
+                    opacity="0.8"
+                  />
+                </svg>
+                {/* Affichage de la distance près du curseur */}
+                <div
+                  className="absolute bg-blue-600 text-white text-xs px-2 py-1 rounded pointer-events-none z-40"
+                  style={{
+                    left: mousePosition.x + 15,
+                    top: mousePosition.y - 25,
+                    whiteSpace: 'nowrap'
+                  }}
+                >
+                  {(liveDistance / SCALE).toFixed(1)}"
+                </div>
+              </>
             )}
 
             {!editMode && pointA && pointB && losResult && (
