@@ -276,6 +276,11 @@ const Warhammer40kLayoutManager = () => {
 
   // Responsive - scale de la table
   const [tableScale, setTableScale] = useState(1);
+  const [userZoom, setUserZoom] = useState(1); // Zoom utilisateur (pinch)
+  const [panOffset, setPanOffset] = useState({ x: 0, y: 0 }); // Décalage de la vue
+  const [isPinching, setIsPinching] = useState(false);
+  const [lastPinchDistance, setLastPinchDistance] = useState(0);
+  const [lastPinchCenter, setLastPinchCenter] = useState({ x: 0, y: 0 });
   const tableContainerRef = useRef(null);
 
   // Fonctions de gestion du LocalStorage pour les résultats LoS
@@ -1568,6 +1573,57 @@ const Warhammer40kLayoutManager = () => {
         });
       }
       
+      // Étape supplémentaire : correction de la symétrie
+      // Les décors sans apostrophe (ex: "GRuine 1") priment sur ceux avec apostrophe (ex: "GRuine 1'")
+      currentTerrains = currentTerrains.map(terrain => {
+        // Vérifier si c'est un décor symétrique (avec apostrophe)
+        if (terrain.name && terrain.name.includes("'") && terrain.symmetricId) {
+          // Trouver le décor principal (sans apostrophe)
+          const mainTerrain = currentTerrains.find(t => t.id === terrain.symmetricId);
+          
+          if (mainTerrain) {
+            const terrainType = TERRAIN_TYPES[terrain.type];
+            
+            // Calculer la position symétrique par rapport au centre de la table
+            // Centre de la table : (300, 220) en pixels
+            const centerX = TABLE_WIDTH / 2;
+            const centerY = TABLE_HEIGHT / 2;
+            
+            // Position du centre du décor principal
+            const mainCenterX = mainTerrain.x + terrainType.width / 2;
+            const mainCenterY = mainTerrain.y + terrainType.height / 2;
+            
+            // Position symétrique du centre
+            const symCenterX = 2 * centerX - mainCenterX;
+            const symCenterY = 2 * centerY - mainCenterY;
+            
+            // Position du coin supérieur gauche du décor symétrique
+            const symX = symCenterX - terrainType.width / 2;
+            const symY = symCenterY - terrainType.height / 2;
+            
+            // Rotation symétrique (180° de différence)
+            const symRotation = (mainTerrain.rotation + 180) % 360;
+            
+            // Vérifier si le décor est déjà bien positionné (tolérance de 0.1 pixel)
+            const needsCorrection = 
+              Math.abs(terrain.x - symX) > 0.1 || 
+              Math.abs(terrain.y - symY) > 0.1 || 
+              Math.abs(terrain.rotation - symRotation) > 0.1;
+            
+            if (needsCorrection) {
+              return {
+                ...terrain,
+                x: symX,
+                y: symY,
+                rotation: symRotation
+              };
+            }
+          }
+        }
+        
+        return terrain;
+      });
+      
       setTerrains(currentTerrains);
       setOptimizing(false);
       // Invalider les résultats LoS pour ce layout
@@ -2078,9 +2134,9 @@ const Warhammer40kLayoutManager = () => {
     const clientX = e.touches ? e.touches[0].clientX : e.clientX;
     const clientY = e.touches ? e.touches[0].clientY : e.clientY;
     
-    // Prendre en compte le scale pour convertir les coordonnées
-    const mouseX = (clientX - rect.left) / (SCALE * tableScale);
-    const mouseY = (clientY - rect.top) / (SCALE * tableScale);
+    // Prendre en compte le scale et le zoom pour convertir les coordonnées
+    const mouseX = (clientX - rect.left) / (SCALE * tableScale * userZoom);
+    const mouseY = (clientY - rect.top) / (SCALE * tableScale * userZoom);
     
     setDragOffset({
       x: mouseX - terrain.x / SCALE,
@@ -2102,9 +2158,9 @@ const Warhammer40kLayoutManager = () => {
     const clientX = e.touches ? e.touches[0].clientX : e.clientX;
     const clientY = e.touches ? e.touches[0].clientY : e.clientY;
     
-    // Prendre en compte le scale pour convertir les coordonnées
-    const mouseX = (clientX - rect.left) / (SCALE * tableScale);
-    const mouseY = (clientY - rect.top) / (SCALE * tableScale);
+    // Prendre en compte le scale et le zoom pour convertir les coordonnées
+    const mouseX = (clientX - rect.left) / (SCALE * tableScale * userZoom);
+    const mouseY = (clientY - rect.top) / (SCALE * tableScale * userZoom);
     
     let newX = mouseX - dragOffset.x;
     let newY = mouseY - dragOffset.y;
@@ -2172,6 +2228,70 @@ const Warhammer40kLayoutManager = () => {
     setIsDragging(false);
     setDragOriginalRotation(null);
     snapGuidesRef.current = [];
+  };
+
+  // Fonctions pour le pinch-to-zoom et pan
+  const getDistance = (touch1, touch2) => {
+    const dx = touch1.clientX - touch2.clientX;
+    const dy = touch1.clientY - touch2.clientY;
+    return Math.sqrt(dx * dx + dy * dy);
+  };
+
+  const getCenter = (touch1, touch2) => {
+    return {
+      x: (touch1.clientX + touch2.clientX) / 2,
+      y: (touch1.clientY + touch2.clientY) / 2
+    };
+  };
+
+  const handlePinchStart = (e) => {
+    if (e.touches.length === 2) {
+      e.preventDefault();
+      setIsPinching(true);
+      const distance = getDistance(e.touches[0], e.touches[1]);
+      const center = getCenter(e.touches[0], e.touches[1]);
+      setLastPinchDistance(distance);
+      setLastPinchCenter(center);
+    }
+  };
+
+  const handlePinchMove = (e) => {
+    if (e.touches.length === 2 && isPinching) {
+      e.preventDefault();
+      
+      const currentDistance = getDistance(e.touches[0], e.touches[1]);
+      const currentCenter = getCenter(e.touches[0], e.touches[1]);
+      
+      // Calculer le facteur de zoom
+      if (lastPinchDistance > 0) {
+        const zoomDelta = currentDistance / lastPinchDistance;
+        const newZoom = Math.min(Math.max(userZoom * zoomDelta, 0.5), 3); // Limiter entre 0.5x et 3x
+        setUserZoom(newZoom);
+      }
+      
+      // Calculer le déplacement (pan)
+      const dx = currentCenter.x - lastPinchCenter.x;
+      const dy = currentCenter.y - lastPinchCenter.y;
+      setPanOffset(prev => ({
+        x: prev.x + dx,
+        y: prev.y + dy
+      }));
+      
+      setLastPinchDistance(currentDistance);
+      setLastPinchCenter(currentCenter);
+    }
+  };
+
+  const handlePinchEnd = (e) => {
+    if (e.touches.length < 2) {
+      setIsPinching(false);
+      setLastPinchDistance(0);
+    }
+  };
+
+  const resetZoomAndPan = () => {
+    setUserZoom(1);
+    setPanOffset({ x: 0, y: 0 });
   };
 
   // Fonctions pour le mode positionnement fin
@@ -3024,9 +3144,9 @@ const Warhammer40kLayoutManager = () => {
     if (editMode) return;
     
     const rect = e.currentTarget.getBoundingClientRect();
-    // Prendre en compte le scale pour convertir les coordonnées
-    const x = (e.clientX - rect.left) / tableScale;
-    const y = (e.clientY - rect.top) / tableScale;
+    // Prendre en compte le scale et le zoom pour convertir les coordonnées
+    const x = (e.clientX - rect.left) / (tableScale * userZoom);
+    const y = (e.clientY - rect.top) / (tableScale * userZoom);
 
     if (!pointA) {
       setPointA({ x, y });
@@ -4584,12 +4704,41 @@ const Warhammer40kLayoutManager = () => {
         )}
         </div>
 
-        <div ref={tableContainerRef} className="bg-gray-700 rounded-lg p-2 overflow-hidden">
+        {/* Bouton de reset zoom si zoomé */}
+        {(userZoom !== 1 || panOffset.x !== 0 || panOffset.y !== 0) && (
+          <button
+            onClick={resetZoomAndPan}
+            className="mb-2 px-3 py-1 bg-gray-600 hover:bg-gray-500 rounded text-sm flex items-center gap-2"
+          >
+            🔍 Réinitialiser le zoom ({Math.round(userZoom * 100)}%)
+          </button>
+        )}
+
+        <div 
+          ref={tableContainerRef} 
+          className="bg-gray-700 rounded-lg p-2 overflow-hidden"
+          onTouchStart={handlePinchStart}
+          onTouchMove={(e) => {
+            if (e.touches.length === 2) {
+              handlePinchMove(e);
+            } else if (editMethod === 'drag' && e.touches.length === 1 && !isPinching) {
+              handleDragMove(e);
+            }
+          }}
+          onTouchEnd={(e) => {
+            handlePinchEnd(e);
+            if (editMethod === 'drag') {
+              handleDragEnd(e);
+            }
+          }}
+          onTouchCancel={handlePinchEnd}
+        >
           <div 
             className="origin-top-left"
             style={{
-              width: TABLE_WIDTH * tableScale,
-              height: TABLE_HEIGHT * tableScale,
+              width: TABLE_WIDTH * tableScale * userZoom,
+              height: TABLE_HEIGHT * tableScale * userZoom,
+              transform: `translate(${panOffset.x}px, ${panOffset.y}px)`,
             }}
           >
           <div
@@ -4597,20 +4746,17 @@ const Warhammer40kLayoutManager = () => {
             style={{
               width: TABLE_WIDTH,
               height: TABLE_HEIGHT,
-              transform: `scale(${tableScale})`,
+              transform: `scale(${tableScale * userZoom})`,
               transformOrigin: 'top left',
               backgroundImage: 'linear-gradient(rgba(255,255,255,.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.1) 1px, transparent 1px)',
               backgroundSize: '10px 10px',
               cursor: editMode ? (editMethod === 'drag' ? (isDragging ? 'grabbing' : 'default') : 'default') : 'crosshair',
-              touchAction: editMode && editMethod === 'drag' ? 'none' : 'auto'
+              touchAction: 'none'
             }}
             onClick={handleTableClick}
             onMouseMove={editMethod === 'drag' ? handleDragMove : undefined}
             onMouseUp={editMethod === 'drag' ? handleDragEnd : undefined}
             onMouseLeave={editMethod === 'drag' ? handleDragEnd : undefined}
-            onTouchMove={editMethod === 'drag' ? handleDragMove : undefined}
-            onTouchEnd={editMethod === 'drag' ? handleDragEnd : undefined}
-            onTouchCancel={editMethod === 'drag' ? handleDragEnd : undefined}
           >
             {/* Définition du marker pour les flèches FEQ */}
             <svg className="absolute" width="0" height="0">
