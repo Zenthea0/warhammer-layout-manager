@@ -223,6 +223,34 @@ const Warhammer40kLayoutManager = () => {
   const [mousePosition, setMousePosition] = useState(null); // Position actuelle de la souris sur la table
   const [liveDistance, setLiveDistance] = useState(null); // Distance en temps réel entre pointA et la souris
   
+  // Mode annotations
+  const [annotationMode, setAnnotationMode] = useState(false);
+  const [annotations, setAnnotations] = useState([]); // Liste des annotations [{id, points, color, width}]
+  const [currentAnnotation, setCurrentAnnotation] = useState(null); // Annotation en cours de dessin
+  const [isDrawing, setIsDrawing] = useState(false);
+  const [annotationColor, setAnnotationColor] = useState('#ef4444'); // Rouge par défaut
+  const [annotationWidth, setAnnotationWidth] = useState(4); // Moyen par défaut
+  const [eraserMode, setEraserMode] = useState(false);
+  
+  // Couleurs prédéfinies pour les annotations
+  const ANNOTATION_COLORS = [
+    { name: 'Rouge', color: '#ef4444' },
+    { name: 'Orange', color: '#f97316' },
+    { name: 'Jaune', color: '#eab308' },
+    { name: 'Vert', color: '#22c55e' },
+    { name: 'Cyan', color: '#06b6d4' },
+    { name: 'Bleu', color: '#3b82f6' },
+    { name: 'Violet', color: '#a855f7' },
+    { name: 'Rose', color: '#ec4899' },
+  ];
+  
+  // Épaisseurs de trait
+  const ANNOTATION_WIDTHS = [
+    { name: 'Fin', width: 2 },
+    { name: 'Moyen', width: 4 },
+    { name: 'Épais', width: 8 },
+  ];
+  
   // Charger les layouts personnalisés depuis localStorage
   const [customLayouts, setCustomLayouts] = useState(() => {
     try {
@@ -255,6 +283,7 @@ const Warhammer40kLayoutManager = () => {
   const [exportShowDeployment, setExportShowDeployment] = useState(true);
   const [exportShowObjectives, setExportShowObjectives] = useState(false);
   const [exportShowSurfaces, setExportShowSurfaces] = useState(false);
+  const [exportShowAnnotations, setExportShowAnnotations] = useState(true);
   const [exportGenerating, setExportGenerating] = useState(false);
   const exportCanvasRef = useRef(null);
   
@@ -402,6 +431,10 @@ const Warhammer40kLayoutManager = () => {
       setPointB(null);
       setLosResult(null);
       setSelectedTerrain(null);
+      
+      // Effacer les annotations (pas de persistance)
+      setAnnotations([]);
+      setCurrentAnnotation(null);
       
       // Charger les résultats LoS sauvegardés pour ce layout et la zone actuelle
       const savedResults = loadLoSResults(layoutName, deploymentZone);
@@ -2578,6 +2611,7 @@ const Warhammer40kLayoutManager = () => {
       showDeploymentZones = false,
       showObjectivesMarkers = false,
       showLoSSurfaces = false,
+      showAnnotations = false,
       forPDF = false
     } = options;
 
@@ -2923,6 +2957,37 @@ const Warhammer40kLayoutManager = () => {
       }
     }
 
+    // Dessiner les annotations si demandé
+    if (showAnnotations && annotations.length > 0) {
+      for (const annotation of annotations) {
+        if (annotation.points.length < 2) continue;
+        
+        ctx.beginPath();
+        ctx.strokeStyle = annotation.color;
+        ctx.lineWidth = annotation.width * EXPORT_SCALE;
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+        ctx.globalAlpha = 0.9;
+        
+        const firstPoint = annotation.points[0];
+        ctx.moveTo(
+          MARGIN + firstPoint.x * EXPORT_SCALE,
+          MARGIN + firstPoint.y * EXPORT_SCALE
+        );
+        
+        for (let i = 1; i < annotation.points.length; i++) {
+          const point = annotation.points[i];
+          ctx.lineTo(
+            MARGIN + point.x * EXPORT_SCALE,
+            MARGIN + point.y * EXPORT_SCALE
+          );
+        }
+        
+        ctx.stroke();
+        ctx.globalAlpha = 1;
+      }
+    }
+
     return canvas;
   };
 
@@ -2936,7 +3001,8 @@ const Warhammer40kLayoutManager = () => {
         showFEQCoords: exportShowFEQCoords,
         showDeploymentZones: exportShowDeployment,
         showObjectivesMarkers: exportShowObjectives,
-        showLoSSurfaces: exportShowSurfaces
+        showLoSSurfaces: exportShowSurfaces,
+        showAnnotations: exportShowAnnotations && annotations.length > 0
       });
       
       // Convertir en blob et ouvrir dans un nouvel onglet
@@ -3215,6 +3281,109 @@ const Warhammer40kLayoutManager = () => {
     }
   };
 
+  // ========== FONCTIONS ANNOTATIONS ==========
+  
+  // Obtenir les coordonnées relatives à la table
+  const getAnnotationCoords = (e, rect) => {
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+    const x = (clientX - rect.left) / (tableScale * userZoom);
+    const y = (clientY - rect.top) / (tableScale * userZoom);
+    return { x, y };
+  };
+
+  // Démarrer une annotation
+  const handleAnnotationStart = (e) => {
+    if (!annotationMode || editMode || eraserMode) return;
+    
+    // Ignorer si c'est un pinch (2 doigts)
+    if (e.touches && e.touches.length > 1) return;
+    
+    const rect = e.currentTarget.getBoundingClientRect();
+    const { x, y } = getAnnotationCoords(e, rect);
+    
+    setIsDrawing(true);
+    setCurrentAnnotation({
+      id: Date.now(),
+      points: [{ x, y }],
+      color: annotationColor,
+      width: annotationWidth
+    });
+  };
+
+  // Continuer une annotation
+  const handleAnnotationMove = (e) => {
+    if (!isDrawing || !currentAnnotation) return;
+    
+    // Ignorer si c'est un pinch
+    if (e.touches && e.touches.length > 1) {
+      handleAnnotationEnd();
+      return;
+    }
+    
+    const rect = e.currentTarget.getBoundingClientRect();
+    const { x, y } = getAnnotationCoords(e, rect);
+    
+    setCurrentAnnotation(prev => ({
+      ...prev,
+      points: [...prev.points, { x, y }]
+    }));
+  };
+
+  // Terminer une annotation
+  const handleAnnotationEnd = () => {
+    if (currentAnnotation && currentAnnotation.points.length > 1) {
+      setAnnotations(prev => [...prev, currentAnnotation]);
+    }
+    setIsDrawing(false);
+    setCurrentAnnotation(null);
+  };
+
+  // Effacer une annotation (mode gomme)
+  const handleEraserClick = (e) => {
+    if (!annotationMode || !eraserMode || editMode) return;
+    
+    const rect = e.currentTarget.getBoundingClientRect();
+    const { x, y } = getAnnotationCoords(e, rect);
+    
+    // Trouver l'annotation la plus proche du clic
+    let closestAnnotation = null;
+    let minDistance = 15; // Distance max pour sélectionner (en pixels)
+    
+    for (const annotation of annotations) {
+      for (const point of annotation.points) {
+        const dist = Math.sqrt((point.x - x) ** 2 + (point.y - y) ** 2);
+        if (dist < minDistance) {
+          minDistance = dist;
+          closestAnnotation = annotation;
+        }
+      }
+    }
+    
+    if (closestAnnotation) {
+      setAnnotations(prev => prev.filter(a => a.id !== closestAnnotation.id));
+    }
+  };
+
+  // Effacer toutes les annotations
+  const clearAllAnnotations = () => {
+    setAnnotations([]);
+    setCurrentAnnotation(null);
+  };
+
+  // Convertir les points d'une annotation en path SVG
+  const pointsToSvgPath = (points) => {
+    if (points.length < 2) return '';
+    
+    let path = `M ${points[0].x} ${points[0].y}`;
+    
+    for (let i = 1; i < points.length; i++) {
+      path += ` L ${points[i].x} ${points[i].y}`;
+    }
+    
+    return path;
+  };
+
   const calculateLoS = (pB, pA) => {
     let blocked = false;
     let blockingTerrain = null;
@@ -3480,6 +3649,19 @@ const Warhammer40kLayoutManager = () => {
               }`}
             >
               📐 <span>{cornersMode === 'hidden' ? 'Coins' : cornersMode === 'classic' ? 'Classique' : 'FEQ'}</span>
+            </button>
+            <button
+              onClick={() => {
+                setAnnotationMode(!annotationMode);
+                if (annotationMode) {
+                  setEraserMode(false);
+                }
+              }}
+              className={`flex items-center gap-1 px-2 py-1.5 rounded text-xs ${
+                annotationMode ? 'bg-pink-600' : 'bg-gray-600'
+              }`}
+            >
+              ✏️ <span>Annotations</span>
             </button>
             <button
               onClick={resetLoS}
@@ -3835,6 +4017,17 @@ const Warhammer40kLayoutManager = () => {
                     />
                     <span className="text-sm">Objectifs</span>
                   </label>
+                  {annotations.length > 0 && (
+                    <label className="flex items-center gap-2 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={exportShowAnnotations}
+                        onChange={(e) => setExportShowAnnotations(e.target.checked)}
+                        className="w-4 h-4 rounded"
+                      />
+                      <span className="text-sm">Annotations ({annotations.length})</span>
+                    </label>
+                  )}
                   {advancedLoSResults && (
                     <label className="flex items-center gap-2 cursor-pointer">
                       <input
@@ -3984,6 +4177,91 @@ const Warhammer40kLayoutManager = () => {
                 Annuler
               </button>
             </div>
+          </div>
+        )}
+
+        {/* Bandeau d'options des annotations */}
+        {annotationMode && !editMode && (
+          <div className="bg-gray-800 rounded-lg p-3 mb-4 border-2 border-pink-500">
+            <div className="flex flex-wrap items-center gap-3">
+              {/* Couleurs */}
+              <div className="flex items-center gap-1">
+                <span className="text-xs text-gray-400 mr-1">Couleur:</span>
+                {ANNOTATION_COLORS.map(c => (
+                  <button
+                    key={c.color}
+                    onClick={() => { setAnnotationColor(c.color); setEraserMode(false); }}
+                    className={`w-6 h-6 rounded-full border-2 ${
+                      annotationColor === c.color && !eraserMode ? 'border-white scale-110' : 'border-gray-600'
+                    }`}
+                    style={{ backgroundColor: c.color }}
+                    title={c.name}
+                  />
+                ))}
+              </div>
+              
+              {/* Séparateur */}
+              <div className="w-px h-6 bg-gray-600" />
+              
+              {/* Épaisseurs */}
+              <div className="flex items-center gap-1">
+                <span className="text-xs text-gray-400 mr-1">Trait:</span>
+                {ANNOTATION_WIDTHS.map(w => (
+                  <button
+                    key={w.width}
+                    onClick={() => { setAnnotationWidth(w.width); setEraserMode(false); }}
+                    className={`px-2 py-1 rounded text-xs ${
+                      annotationWidth === w.width && !eraserMode
+                        ? 'bg-pink-600 text-white' 
+                        : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                    }`}
+                  >
+                    <span style={{ 
+                      display: 'inline-block', 
+                      width: '20px', 
+                      height: `${w.width}px`, 
+                      backgroundColor: 'currentColor',
+                      verticalAlign: 'middle'
+                    }} />
+                  </button>
+                ))}
+              </div>
+              
+              {/* Séparateur */}
+              <div className="w-px h-6 bg-gray-600" />
+              
+              {/* Gomme */}
+              <button
+                onClick={() => setEraserMode(!eraserMode)}
+                className={`flex items-center gap-1 px-2 py-1 rounded text-xs ${
+                  eraserMode ? 'bg-yellow-500 text-black' : 'bg-gray-700 hover:bg-gray-600'
+                }`}
+              >
+                🧽 Gomme
+              </button>
+              
+              {/* Tout effacer */}
+              <button
+                onClick={clearAllAnnotations}
+                disabled={annotations.length === 0}
+                className="flex items-center gap-1 px-2 py-1 rounded text-xs bg-red-700 hover:bg-red-600 disabled:bg-gray-700 disabled:text-gray-500"
+              >
+                🗑️ Tout effacer
+              </button>
+              
+              {/* Compteur */}
+              {annotations.length > 0 && (
+                <span className="text-xs text-gray-400">
+                  ({annotations.length} annotation{annotations.length > 1 ? 's' : ''})
+                </span>
+              )}
+            </div>
+            
+            <p className="text-xs text-gray-400 mt-2">
+              💡 {eraserMode 
+                ? 'Cliquez sur une annotation pour la supprimer' 
+                : 'Dessinez avec le stylet ou le doigt. Le clic simple reste disponible pour mesurer les distances.'}
+            </p>
           </div>
         )}
 
@@ -4768,6 +5046,14 @@ const Warhammer40kLayoutManager = () => {
           </button>
         )}
 
+        {/* Indicateur souris détectée (pour debug - peut être retiré plus tard) */}
+        {!editMode && (
+          <div className="mb-2 text-xs text-gray-400">
+            {hasMouse ? '🖱️ Souris détectée' : '👆 Mode tactile'}
+            {pointA && !pointB && hasMouse && ' - Déplacez la souris pour voir la distance'}
+          </div>
+        )}
+
         <div 
           ref={tableContainerRef} 
           className="bg-gray-700 rounded-lg p-2 overflow-hidden"
@@ -4804,22 +5090,65 @@ const Warhammer40kLayoutManager = () => {
               transformOrigin: 'top left',
               backgroundImage: 'linear-gradient(rgba(255,255,255,.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.1) 1px, transparent 1px)',
               backgroundSize: '10px 10px',
-              cursor: editMode ? (editMethod === 'drag' ? (isDragging ? 'grabbing' : 'default') : 'default') : 'crosshair',
+              cursor: editMode 
+                ? (editMethod === 'drag' ? (isDragging ? 'grabbing' : 'default') : 'default') 
+                : (annotationMode 
+                  ? (eraserMode ? 'pointer' : 'crosshair') 
+                  : 'crosshair'),
               touchAction: 'none'
             }}
-            onClick={handleTableClick}
+            onClick={(e) => {
+              if (annotationMode && eraserMode) {
+                handleEraserClick(e);
+              } else {
+                handleTableClick(e);
+              }
+            }}
+            onMouseDown={(e) => {
+              if (annotationMode && !eraserMode && !editMode) {
+                handleAnnotationStart(e);
+              }
+            }}
             onMouseMove={(e) => {
               if (editMethod === 'drag') {
                 handleDragMove(e);
               }
               handleTableMouseMove(e);
+              if (annotationMode && !eraserMode && isDrawing) {
+                handleAnnotationMove(e);
+              }
             }}
-            onMouseUp={editMethod === 'drag' ? handleDragEnd : undefined}
+            onMouseUp={(e) => {
+              if (editMethod === 'drag') {
+                handleDragEnd(e);
+              }
+              if (annotationMode && !eraserMode) {
+                handleAnnotationEnd();
+              }
+            }}
             onMouseLeave={(e) => {
               if (editMethod === 'drag') {
                 handleDragEnd(e);
               }
               handleTableMouseLeave();
+              if (annotationMode && !eraserMode) {
+                handleAnnotationEnd();
+              }
+            }}
+            onTouchStart={(e) => {
+              if (annotationMode && !eraserMode && !editMode && e.touches.length === 1) {
+                handleAnnotationStart(e);
+              }
+            }}
+            onTouchMove={(e) => {
+              if (annotationMode && !eraserMode && isDrawing && e.touches.length === 1) {
+                handleAnnotationMove(e);
+              }
+            }}
+            onTouchEnd={() => {
+              if (annotationMode && !eraserMode) {
+                handleAnnotationEnd();
+              }
             }}
           >
             {/* Définition du marker pour les flèches FEQ */}
@@ -5475,6 +5804,37 @@ const Warhammer40kLayoutManager = () => {
                     y2={pointB.y}
                     stroke="#22c55e"
                     strokeWidth="3"
+                  />
+                )}
+              </svg>
+            )}
+
+            {/* Affichage des annotations */}
+            {(annotations.length > 0 || currentAnnotation) && (
+              <svg className="absolute top-0 left-0 pointer-events-none z-20" width={TABLE_WIDTH} height={TABLE_HEIGHT}>
+                {/* Annotations terminées */}
+                {annotations.map(annotation => (
+                  <path
+                    key={annotation.id}
+                    d={pointsToSvgPath(annotation.points)}
+                    stroke={annotation.color}
+                    strokeWidth={annotation.width}
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    fill="none"
+                    opacity="0.9"
+                  />
+                ))}
+                {/* Annotation en cours de dessin */}
+                {currentAnnotation && currentAnnotation.points.length > 1 && (
+                  <path
+                    d={pointsToSvgPath(currentAnnotation.points)}
+                    stroke={currentAnnotation.color}
+                    strokeWidth={currentAnnotation.width}
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    fill="none"
+                    opacity="0.9"
                   />
                 )}
               </svg>
