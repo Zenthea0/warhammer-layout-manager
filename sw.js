@@ -1,4 +1,4 @@
-const CACHE_NAME = 'w40k-layout-manager-v1';
+const CACHE_NAME = 'w40k-layout-manager-v4';
 const urlsToCache = [
   './',
   './index.html',
